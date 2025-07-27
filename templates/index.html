@@ -1,0 +1,610 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ config.clinic_name }} - Chatbot</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .chat-container {
+            width: 100%;
+            max-width: 400px;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            overflow: hidden;
+            position: relative;
+        }
+
+        .chat-header {
+            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+            padding: 20px;
+            text-align: center;
+            position: relative;
+        }
+
+        .chat-header h1 {
+            color: white;
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 10px;
+        }
+
+        .close-btn {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background: rgba(255,255,255,0.2);
+            border: none;
+            color: white;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .tooth-icon {
+            width: 60px;
+            height: 60px;
+            margin: 0 auto 15px;
+            background: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 30px;
+        }
+
+        .chat-body {
+            padding: 20px;
+            max-height: 400px;
+            overflow-y: auto;
+        }
+
+        .welcome-message {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 15px;
+            margin-bottom: 20px;
+            color: #333;
+            font-size: 14px;
+            line-height: 1.4;
+        }
+
+        .quick-actions {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .action-btn {
+            display: flex;
+            align-items: center;
+            padding: 12px 15px;
+            border: 2px solid #4facfe;
+            border-radius: 10px;
+            background: white;
+            color: #4facfe;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+        }
+
+        .action-btn:hover {
+            background: #4facfe;
+            color: white;
+            transform: translateY(-2px);
+        }
+
+        .action-btn i {
+            margin-right: 10px;
+            font-size: 18px;
+        }
+
+        .location-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .location-modal-content {
+            background: white;
+            border-radius: 20px;
+            padding: 30px;
+            max-width: 400px;
+            width: 90%;
+            max-height: 80vh;
+            overflow-y: auto;
+            position: relative;
+        }
+
+        .location-modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .location-modal-title {
+            font-size: 20px;
+            font-weight: 600;
+            color: #333;
+        }
+
+        .close-modal-btn {
+            background: none;
+            border: none;
+            font-size: 24px;
+            cursor: pointer;
+            color: #666;
+        }
+
+        .location-list {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .location-item {
+            display: flex;
+            align-items: center;
+            padding: 15px;
+            border: 2px solid #e9ecef;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            color: #333;
+        }
+
+        .location-item:hover {
+            border-color: #4facfe;
+            background: #f8f9fa;
+            transform: translateY(-2px);
+        }
+
+        .location-item i {
+            margin-right: 15px;
+            font-size: 20px;
+            color: #4facfe;
+        }
+
+        .location-info {
+            flex: 1;
+        }
+
+        .location-name {
+            font-weight: 600;
+            margin-bottom: 5px;
+        }
+
+        .location-address {
+            font-size: 12px;
+            color: #666;
+        }
+
+        .quick-reply-buttons {
+            display: flex;
+            gap: 10px;
+            margin-top: 10px;
+            flex-wrap: wrap;
+        }
+
+        .quick-reply-btn {
+            padding: 8px 15px;
+            border: 2px solid #4facfe;
+            border-radius: 20px;
+            background: white;
+            color: #4facfe;
+            font-size: 12px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .quick-reply-btn:hover {
+            background: #4facfe;
+            color: white;
+        }
+
+        .bot-message {
+            background: #f1f3f4;
+            color: #333;
+            border-bottom-left-radius: 5px;
+            position: relative;
+        }
+
+        .chat-messages {
+            max-height: 200px;
+            overflow-y: auto;
+            margin-bottom: 15px;
+        }
+
+        .message {
+            margin-bottom: 10px;
+            padding: 10px 15px;
+            border-radius: 15px;
+            max-width: 80%;
+            word-wrap: break-word;
+        }
+
+        .user-message {
+            background: #4facfe;
+            color: white;
+            margin-left: auto;
+            border-bottom-right-radius: 5px;
+        }
+
+        .bot-message {
+            background: #f1f3f4;
+            color: #333;
+            border-bottom-left-radius: 5px;
+        }
+
+        .chat-input-container {
+            display: flex;
+            gap: 10px;
+            padding: 15px 20px;
+            background: #f8f9fa;
+            border-top: 1px solid #e9ecef;
+        }
+
+        .chat-input {
+            flex: 1;
+            padding: 12px 15px;
+            border: 2px solid #e9ecef;
+            border-radius: 25px;
+            font-size: 14px;
+            outline: none;
+            transition: border-color 0.3s ease;
+        }
+
+        .chat-input:focus {
+            border-color: #4facfe;
+        }
+
+        .send-btn {
+            background: #4facfe;
+            color: white;
+            border: none;
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+            transition: all 0.3s ease;
+        }
+
+        .send-btn:hover {
+            background: #3a8bfd;
+            transform: scale(1.05);
+        }
+
+        .send-btn:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+        }
+
+        .typing-indicator {
+            display: none;
+            padding: 10px 15px;
+            color: #666;
+            font-style: italic;
+        }
+
+        @media (max-width: 480px) {
+            .chat-container {
+                max-width: 100%;
+                border-radius: 0;
+                height: 100vh;
+            }
+            
+            .chat-body {
+                max-height: calc(100vh - 200px);
+            }
+            
+            .chat-messages {
+                max-height: calc(100vh - 350px);
+            }
+        }
+
+        /* Animaciones */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .message {
+            animation: fadeIn 0.3s ease;
+        }
+
+        /* Scrollbar personalizado */
+        .chat-messages::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        .chat-messages::-webkit-scrollbar-track {
+            background: #f1f1f1;
+            border-radius: 3px;
+        }
+
+        .chat-messages::-webkit-scrollbar-thumb {
+            background: #c1c1c1;
+            border-radius: 3px;
+        }
+
+        .chat-messages::-webkit-scrollbar-thumb:hover {
+            background: #a8a8a8;
+        }
+    </style>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <div class="chat-container">
+        <div class="chat-header">
+            <button class="close-btn" onclick="closeChat()">
+                <i class="fas fa-times"></i>
+            </button>
+            <div class="tooth-icon">
+                <i class="fas fa-tooth" style="color: #4facfe;"></i>
+            </div>
+            <h1>{{ config.clinic_name }}</h1>
+        </div>
+
+        <div class="chat-body">
+            <div class="welcome-message">
+                {{ config.welcome_message }}
+            </div>
+
+            <div class="quick-actions">
+                <button class="action-btn" onclick="sendQuickMessage('Información sobre tratamientos')">
+                    <i class="fas fa-tooth" style="color: #666;"></i>
+                    Información sobre tratamientos
+                </button>
+                <button class="action-btn" onclick="sendQuickMessage('Solicitar una cita')">
+                    <i class="fas fa-calendar-alt" style="color: #9c27b0;"></i>
+                    Solicitar una cita
+                </button>
+                <button class="action-btn" onclick="showLocations()">
+                    <i class="fas fa-map-marker-alt" style="color: #f44336;"></i>
+                    Ver ubicaciones
+                </button>
+            </div>
+
+            <div class="chat-messages" id="chatMessages">
+                <!-- Los mensajes se agregarán aquí dinámicamente -->
+            </div>
+
+            <div class="typing-indicator" id="typingIndicator">
+                <i class="fas fa-circle"></i>
+                <i class="fas fa-circle"></i>
+                <i class="fas fa-circle"></i>
+            </div>
+        </div>
+
+        <div class="chat-input-container">
+            <input type="text" class="chat-input" id="messageInput" placeholder="Escribe un mensaje..." onkeypress="handleKeyPress(event)">
+            <button class="send-btn" onclick="sendMessage()" id="sendBtn">
+                <i class="fas fa-paper-plane"></i>
+            </button>
+        </div>
+    </div>
+
+    <!-- Modal de Ubicaciones -->
+    <div class="location-modal" id="locationModal">
+        <div class="location-modal-content">
+            <div class="location-modal-header">
+                <h2 class="location-modal-title">Nuestras Ubicaciones</h2>
+                <button class="close-modal-btn" onclick="closeLocationModal()">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="location-list">
+                <a href="https://maps.google.com/?q=Madrid,España" target="_blank" class="location-item">
+                    <i class="fas fa-map-marker-alt"></i>
+                    <div class="location-info">
+                        <div class="location-name">Madrid</div>
+                        <div class="location-address">Calle Gran Vía 123, Madrid</div>
+                    </div>
+                </a>
+                <a href="https://maps.google.com/?q=Barcelona,España" target="_blank" class="location-item">
+                    <i class="fas fa-map-marker-alt"></i>
+                    <div class="location-info">
+                        <div class="location-name">Barcelona</div>
+                        <div class="location-address">Paseo de Gracia 456, Barcelona</div>
+                    </div>
+                </a>
+                <a href="https://maps.google.com/?q=Valencia,España" target="_blank" class="location-item">
+                    <i class="fas fa-map-marker-alt"></i>
+                    <div class="location-info">
+                        <div class="location-name">Valencia</div>
+                        <div class="location-address">Calle Colón 789, Valencia</div>
+                    </div>
+                </a>
+                <a href="https://maps.google.com/?q=Sevilla,España" target="_blank" class="location-item">
+                    <i class="fas fa-map-marker-alt"></i>
+                    <div class="location-info">
+                        <div class="location-name">Sevilla</div>
+                        <div class="location-address">Avenida de la Constitución 321, Sevilla</div>
+                    </div>
+                </a>
+                <a href="https://maps.google.com/?q=Bilbao,España" target="_blank" class="location-item">
+                    <i class="fas fa-map-marker-alt"></i>
+                    <div class="location-info">
+                        <div class="location-name">Bilbao</div>
+                        <div class="location-address">Gran Vía 654, Bilbao</div>
+                    </div>
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let isTyping = false;
+
+        function closeChat() {
+            if (confirm('¿Estás seguro de que quieres cerrar el chat?')) {
+                window.close();
+            }
+        }
+
+        function showLocations() {
+            const modal = document.getElementById('locationModal');
+            modal.style.display = 'flex';
+        }
+
+        function closeLocationModal() {
+            const modal = document.getElementById('locationModal');
+            modal.style.display = 'none';
+        }
+
+        // Cerrar modal al hacer clic fuera de él
+        document.addEventListener('click', function(event) {
+            const modal = document.getElementById('locationModal');
+            if (event.target === modal) {
+                closeLocationModal();
+            }
+        });
+
+        function sendQuickMessage(message) {
+            addMessage(message, 'user');
+            sendToAPI(message);
+        }
+
+        function sendMessage() {
+            const input = document.getElementById('messageInput');
+            const message = input.value.trim();
+            
+            if (message) {
+                addMessage(message, 'user');
+                input.value = '';
+                sendToAPI(message);
+            }
+        }
+
+        function handleKeyPress(event) {
+            if (event.key === 'Enter') {
+                sendMessage();
+            }
+        }
+
+        function addMessage(message, sender, showQuickReplies = false) {
+            const chatMessages = document.getElementById('chatMessages');
+            const messageDiv = document.createElement('div');
+            messageDiv.className = `message ${sender}-message`;
+            messageDiv.textContent = message;
+            
+            // Agregar botones de respuesta rápida si es necesario
+            if (showQuickReplies && sender === 'bot') {
+                const quickRepliesDiv = document.createElement('div');
+                quickRepliesDiv.className = 'quick-reply-buttons';
+                
+                // Verificar qué tipo de botones mostrar
+                if (message.includes('¿Ya tienes un tratamiento abierto con nuestra clínica?')) {
+                    quickRepliesDiv.innerHTML = `
+                        <button class="quick-reply-btn" onclick="sendQuickMessage('Sí, ya tengo tratamiento')">Sí, ya tengo tratamiento</button>
+                        <button class="quick-reply-btn" onclick="sendQuickMessage('No, es mi primera vez')">No, es mi primera vez</button>
+                    `;
+                } else if (message.includes('¿Qué tipo de tratamiento te interesa?')) {
+                    quickRepliesDiv.innerHTML = `
+                        <button class="quick-reply-btn" onclick="sendQuickMessage('Limpieza dental')">Limpieza dental</button>
+                        <button class="quick-reply-btn" onclick="sendQuickMessage('Empastes')">Empastes</button>
+                        <button class="quick-reply-btn" onclick="sendQuickMessage('Ortodoncia')">Ortodoncia</button>
+                        <button class="quick-reply-btn" onclick="sendQuickMessage('Cirugía oral')">Cirugía oral</button>
+                        <button class="quick-reply-btn" onclick="sendQuickMessage('Blanqueamiento')">Blanqueamiento</button>
+                    `;
+                }
+                
+                messageDiv.appendChild(quickRepliesDiv);
+            }
+            
+            chatMessages.appendChild(messageDiv);
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+        }
+
+        function showTypingIndicator() {
+            const indicator = document.getElementById('typingIndicator');
+            indicator.style.display = 'block';
+            document.getElementById('chatMessages').scrollTop = document.getElementById('chatMessages').scrollHeight;
+        }
+
+        function hideTypingIndicator() {
+            const indicator = document.getElementById('typingIndicator');
+            indicator.style.display = 'none';
+        }
+
+        async function sendToAPI(message) {
+            if (isTyping) return;
+            
+            isTyping = true;
+            showTypingIndicator();
+            
+            try {
+                const response = await fetch('/chat', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ message: message })
+                });
+
+                const data = await response.json();
+                
+                hideTypingIndicator();
+                
+                if (data.error) {
+                    addMessage('Lo siento, ha ocurrido un error. Por favor, inténtalo de nuevo.', 'bot');
+                } else {
+                    // Verificar si el mensaje contiene preguntas que requieren botones de respuesta rápida
+                    const showQuickReplies = data.response.includes('¿Ya tienes un tratamiento abierto con nuestra clínica?') || 
+                                           data.response.includes('¿Qué tipo de tratamiento te interesa?');
+                    addMessage(data.response, 'bot', showQuickReplies);
+                }
+            } catch (error) {
+                hideTypingIndicator();
+                addMessage('Lo siento, no puedo conectarme al servidor en este momento. Por favor, inténtalo más tarde.', 'bot');
+            } finally {
+                isTyping = false;
+            }
+        }
+
+        // Enfocar el input al cargar la página
+        document.addEventListener('DOMContentLoaded', function() {
+            document.getElementById('messageInput').focus();
+        });
+    </script>
+</body>
+</html> 

@@ -1,0 +1,6 @@
+# Configuración de OpenAI
+OPENAI_API_KEY=tu_api_key_de_openai_aqui
+
+# Configuración del servidor Flask
+FLASK_ENV=development
+FLASK_DEBUG=1 
