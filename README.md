@@ -66,15 +66,27 @@ El servidor se ejecutará en `http://localhost:5000`
 ### Acceder al chatbot
 Abre tu navegador y ve a `http://localhost:5000`
 
-## Configuración para Render
+## Despliegue en Render
 
-Para desplegar en Render:
+### Opción 1: Usando render.yaml (Recomendado)
+El proyecto incluye un archivo `render.yaml` que automatiza la configuración:
+
+1. **Sube tu código a GitHub**
+2. **Ve a [Render.com](https://render.com)**
+3. **Crea un nuevo Web Service**
+4. **Conecta tu repositorio de GitHub**
+5. **Render detectará automáticamente el archivo `render.yaml`**
+6. **Configura la variable de entorno:**
+   - `OPENAI_API_KEY`: Tu API key de OpenAI
+
+### Opción 2: Configuración manual
+Si prefieres configurar manualmente:
 
 1. **Crear una nueva Web Service**
 2. **Conectar tu repositorio de GitHub**
 3. **Configurar las variables de entorno:**
    - `OPENAI_API_KEY`: Tu API key de OpenAI
-   - `PYTHON_VERSION`: 3.9.0 (o la versión que prefieras)
+   - `PYTHON_VERSION`: 3.9.16
 
 4. **Configurar el comando de build:**
    ```
@@ -83,8 +95,11 @@ Para desplegar en Render:
 
 5. **Configurar el comando de start:**
    ```
-   python app.py
+   gunicorn app:app
    ```
+
+### Variables de entorno requeridas
+- `OPENAI_API_KEY`: Tu clave API de OpenAI (obligatoria)
 
 ## Estructura del Proyecto
 
