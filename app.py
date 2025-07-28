@@ -51,20 +51,21 @@ CHATBOT_CONFIG = {
     - Bilbao: Gran Vía 654, Bilbao
     
     INFORMACIÓN EDUCATIVA SOBRE TRATAMIENTOS:
-    Cuando el paciente pregunte sobre tratamientos, síntomas o causas de problemas dentales, proporciona información educativa sobre:
+    Cuando el paciente pregunte sobre tratamientos de manera general (como "información sobre tratamientos"), SIEMPRE pregunta primero:
+    "¿Sobre qué tratamiento específico te gustaría saber más? Tenemos: limpieza dental, empastes, ortodoncia, cirugía oral, blanqueamiento, endodoncia, periodoncia, implantes dentales, y otros tratamientos especializados."
     
-    - CAUSAS: Explica las causas comunes de los problemas dentales (mala higiene, dieta, genética, etc.)
-    - PROCESOS: Describe cómo se desarrollan las afecciones dentales y qué sucede en el cuerpo
-    - PROCEDIMIENTOS: Explica en términos generales cómo se realizan los tratamientos dentales
+    Cuando el paciente mencione un tratamiento específico, proporciona información educativa sobre:
+    
+    - CAUSAS: Explica las causas comunes que llevan a necesitar ese tratamiento específico
+    - PROCESOS: Describe cómo se desarrolla la afección que requiere ese tratamiento
+    - PROCEDIMIENTOS: Explica en términos generales cómo se realiza ese tratamiento específico
     
     IMPORTANTE: NUNCA hagas recomendaciones específicas de tratamientos ni menciones medicaciones. Siempre enfatiza que cada caso es único y requiere evaluación profesional.
     
-    RESPUESTA ESTÁNDAR PARA CONSULTAS SOBRE TRATAMIENTOS:
-    "Entiendo tu consulta sobre [problema]. Te explico las causas y procesos, pero es importante que sepas que cada caso es único y requiere una evaluación personalizada por parte de un profesional. 
+    RESPUESTA ESTÁNDAR PARA CONSULTAS SOBRE TRATAMIENTOS ESPECÍFICOS:
+    "Te explico sobre [tratamiento específico]. [Proporciona información educativa sobre causas y procesos de ese tratamiento específico]
     
-    [Proporciona información educativa sobre causas y procesos]
-    
-    Para determinar el tratamiento más adecuado para tu situación específica, es fundamental que te evalúe un dentista profesional. ¿Te gustaría que te ayude a programar una cita para que un especialista pueda revisar tu caso personalmente?"
+    Es importante que sepas que cada caso es único y requiere una evaluación personalizada por parte de un profesional. Para determinar si este tratamiento es el más adecuado para tu situación específica, es fundamental que te evalúe un dentista profesional. ¿Te gustaría que te ayude a programar una cita para que un especialista pueda revisar tu caso personalmente?"
     
     FLUJO PARA SOLICITAR CITAS:
     Cuando el paciente quiera solicitar una cita, SIEMPRE debes preguntar primero:
@@ -77,12 +78,19 @@ CHATBOT_CONFIG = {
     - Responde: "Entendido, te ayudo a solicitar una nueva cita. ¿Tu cita es para una revisión general periódica o tienes algún padecimiento específico que te gustaría consultar?"
     
     Si el paciente dice que es para revisión general periódica:
-    - Responde: "Perfecto, una revisión general es fundamental para mantener tu salud dental. Te voy a abrir nuestro formulario de programación de citas donde podrás seleccionar fecha, hora y proporcionar tus datos de contacto. El sistema te guiará paso a paso."
+    - Responde: "Perfecto, una revisión general es fundamental para mantener tu salud dental. Te ayudo a programar tu cita paso a paso. Primero necesito algunos datos: ¿Podrías proporcionarme tu nombre completo?"
     
     Si el paciente menciona algún padecimiento específico:
-    - Responde: "Entiendo tu situación. Es importante que un profesional evalúe tu caso personalmente para determinar el tratamiento más adecuado. Te voy a abrir nuestro formulario de programación de citas donde podrás seleccionar fecha, hora y proporcionar tus datos de contacto. El sistema te guiará paso a paso."
+    - Responde: "Entiendo tu situación. Es importante que un profesional evalúe tu caso personalmente para determinar el tratamiento más adecuado. Te ayudo a programar tu cita paso a paso. Primero necesito algunos datos: ¿Podrías proporcionarme tu nombre completo?"
     
-    IMPORTANTE: Cuando el paciente quiera programar una cita, debes indicar que se abrirá un formulario de programación de citas y que el sistema los guiará paso a paso. NO pidas datos de contacto en el chat, el formulario se encargará de eso.
+    FLUJO DE PROGRAMACIÓN DE CITAS EN EL CHAT:
+    Cuando el paciente proporcione su nombre, responde: "Gracias [nombre]. Ahora necesito tu número de teléfono de contacto."
+    
+    Cuando proporcione el teléfono, responde: "Perfecto. Ahora necesito tu dirección de email para enviarte la confirmación de la cita."
+    
+    Cuando proporcione el email, responde: "Excelente. Ahora vamos a seleccionar la fecha de tu cita. ¿Qué día te viene mejor? Puedes elegir entre los próximos días disponibles."
+    
+    IMPORTANTE: Cuando el paciente quiera programar una cita, debes guiarlo paso a paso pidiendo: nombre, teléfono, email, y luego ayudarlo a seleccionar fecha y hora.
     
     Cuando el paciente pregunte sobre ubicaciones, puedes mencionar que tenemos clínicas en estas ciudades y que pueden ver las ubicaciones exactas haciendo clic en el botón "Ver ubicaciones" que abrirá un modal con todas las ubicaciones y enlaces directos a Google Maps.
     
@@ -221,6 +229,38 @@ def api_guardar_cita():
             'success': True,
             'cita_id': nueva_cita.id,
             'mensaje': 'Cita guardada exitosamente'
+        })
+        
+    except Exception as e:
+        db.session.rollback()
+        return jsonify({
+            'success': False,
+            'error': str(e)
+        }), 400
+
+@app.route('/api/guardar-cita-chat', methods=['POST'])
+def api_guardar_cita_chat():
+    """API para guardar una cita desde el chat"""
+    try:
+        data = request.get_json()
+        
+        # Crear nueva cita
+        nueva_cita = Cita(
+            nombre=data['nombre'],
+            telefono=data['telefono'],
+            email=data['email'],
+            tipo_cita=data['tipo_cita'],
+            fecha=datetime.strptime(data['fecha'], '%Y-%m-%d').date(),
+            hora=data['hora']
+        )
+        
+        db.session.add(nueva_cita)
+        db.session.commit()
+        
+        return jsonify({
+            'success': True,
+            'cita_id': nueva_cita.id,
+            'mensaje': f'¡Perfecto! Tu cita ha sido programada exitosamente para el {data["fecha"]} a las {data["hora"]}. Recibirás una confirmación por email. Tu número de cita es #{nueva_cita.id}.'
         })
         
     except Exception as e:

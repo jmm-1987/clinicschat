@@ -334,6 +334,148 @@
             }
         }
 
+        /* Estilos para el calendario */
+        .calendar-container {
+            margin-top: 10px;
+        }
+
+        .month-calendar {
+            margin-bottom: 20px;
+            background: white;
+            border-radius: 10px;
+            padding: 15px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        .month-title {
+            font-size: 16px;
+            font-weight: 600;
+            text-align: center;
+            margin-bottom: 15px;
+            color: #333;
+        }
+
+        .calendar-header {
+            display: grid;
+            grid-template-columns: repeat(6, 1fr);
+            gap: 5px;
+            margin-bottom: 10px;
+        }
+
+        .calendar-day-header {
+            text-align: center;
+            font-size: 12px;
+            font-weight: 600;
+            color: #666;
+            padding: 5px;
+        }
+
+        .calendar-days {
+            display: grid;
+            grid-template-columns: repeat(6, 1fr);
+            gap: 5px;
+        }
+
+        .calendar-day {
+            aspect-ratio: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            border: 2px solid #e9ecef;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 11px;
+            background: white;
+        }
+
+        .calendar-day.available:hover {
+            border-color: #4facfe;
+            background: #f8f9fa;
+            transform: scale(1.05);
+        }
+
+        .calendar-day.selected {
+            background: #4facfe;
+            color: white;
+            border-color: #4facfe;
+        }
+
+        .calendar-day.empty {
+            background: transparent;
+            border: none;
+            cursor: default;
+        }
+
+        .day-number {
+            font-weight: 600;
+            font-size: 14px;
+        }
+
+        .day-name {
+            font-size: 10px;
+            opacity: 0.8;
+        }
+
+        /* Estilos para las horas */
+        .hours-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(70px, 1fr));
+            gap: 8px;
+            margin-top: 10px;
+        }
+
+        .hour-btn {
+            padding: 10px 8px;
+            border: 2px solid #e9ecef;
+            border-radius: 8px;
+            background: white;
+            color: #333;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 12px;
+            text-align: center;
+            font-weight: 500;
+        }
+
+        .hour-btn:hover {
+            border-color: #4facfe;
+            background: #f8f9fa;
+            transform: scale(1.05);
+        }
+
+        .hour-btn.selected {
+            background: #4facfe;
+            color: white;
+            border-color: #4facfe;
+        }
+
+        /* Responsive para calendario */
+        @media (max-width: 480px) {
+            .calendar-day {
+                font-size: 10px;
+            }
+            
+            .day-number {
+                font-size: 12px;
+            }
+            
+            .day-name {
+                font-size: 9px;
+            }
+            
+            .hour-btn {
+                padding: 8px 6px;
+                font-size: 11px;
+            }
+            
+            .hours-grid {
+                grid-template-columns: repeat(auto-fill, minmax(60px, 1fr));
+                gap: 6px;
+            }
+        }
+
         .send-btn:disabled {
             background: #ccc;
             cursor: not-allowed;
@@ -735,6 +877,17 @@
                         <button class="quick-reply-btn" onclick="sendQuickMessage('Revisión general periódica')">Revisión general periódica</button>
                         <button class="quick-reply-btn" onclick="sendQuickMessage('Tengo algún padecimiento')">Tengo algún padecimiento</button>
                     `;
+                } else if (message.includes('¿Sobre qué tratamiento específico te gustaría saber más?')) {
+                    quickRepliesDiv.innerHTML = `
+                        <button class="quick-reply-btn" onclick="sendQuickMessage('Limpieza dental')">Limpieza dental</button>
+                        <button class="quick-reply-btn" onclick="sendQuickMessage('Empastes')">Empastes</button>
+                        <button class="quick-reply-btn" onclick="sendQuickMessage('Ortodoncia')">Ortodoncia</button>
+                        <button class="quick-reply-btn" onclick="sendQuickMessage('Cirugía oral')">Cirugía oral</button>
+                        <button class="quick-reply-btn" onclick="sendQuickMessage('Blanqueamiento')">Blanqueamiento</button>
+                        <button class="quick-reply-btn" onclick="sendQuickMessage('Endodoncia')">Endodoncia</button>
+                        <button class="quick-reply-btn" onclick="sendQuickMessage('Periodoncia')">Periodoncia</button>
+                        <button class="quick-reply-btn" onclick="sendQuickMessage('Implantes dentales')">Implantes dentales</button>
+                    `;
                 }
                 
                 messageDiv.appendChild(quickRepliesDiv);
@@ -762,6 +915,13 @@
             showTypingIndicator();
             
             try {
+                // Manejar el flujo de citas
+                if (pasoCita > 0) {
+                    manejarFlujoCitas(message);
+                    hideTypingIndicator();
+                    return;
+                }
+                
                 const response = await fetch('/chat', {
                     method: 'POST',
                     headers: {
@@ -779,19 +939,26 @@
                 } else {
                     // Verificar si el mensaje contiene preguntas que requieren botones de respuesta rápida
                     const showQuickReplies = data.response.includes('¿Ya tienes un tratamiento abierto con nuestra clínica?') || 
-                                           data.response.includes('¿Tu cita es para una revisión general periódica o tienes algún padecimiento específico?');
+                                           data.response.includes('¿Tu cita es para una revisión general periódica o tienes algún padecimiento específico?') ||
+                                           data.response.includes('¿Sobre qué tratamiento específico te gustaría saber más?');
                     addMessage(data.response, 'bot', showQuickReplies);
                     
-                    // Verificar si el mensaje menciona el formulario de citas
-                    if (data.response.includes('formulario de programación de citas')) {
+                    // Verificar si el mensaje menciona selección de fecha
+                    if (data.response.includes('seleccionar la fecha de tu cita') || data.response.includes('¿Qué día te viene mejor?')) {
                         setTimeout(() => {
-                            // Determinar el tipo de cita basado en el contexto
-                            let tipoCita = 'revision';
-                            if (data.response.includes('padecimiento')) {
-                                tipoCita = 'padecimiento';
-                            }
-                            window.open(`/citas?tipo=${tipoCita}`, '_blank');
-                        }, 2000);
+                            mostrarCalendario();
+                        }, 1000);
+                    }
+                    
+                    // Verificar si inicia el flujo de citas
+                    if (data.response.includes('¿Podrías proporcionarme tu nombre completo?')) {
+                        pasoCita = 1;
+                        // Determinar tipo de cita basado en el contexto
+                        if (data.response.includes('revisión general')) {
+                            datosCita.tipo_cita = 'revision';
+                        } else {
+                            datosCita.tipo_cita = 'padecimiento';
+                        }
                     }
                 }
             } catch (error) {
@@ -801,6 +968,48 @@
                 isTyping = false;
             }
         }
+
+        // Función para manejar el flujo de citas
+        function manejarFlujoCitas(message) {
+            switch (pasoCita) {
+                case 1: // Nombre
+                    datosCita.nombre = message;
+                    addMessage(`Gracias ${message}. Ahora necesito tu número de teléfono de contacto.`, 'bot');
+                    pasoCita = 2;
+                    break;
+                    
+                case 2: // Teléfono
+                    datosCita.telefono = message;
+                    addMessage('Perfecto. Ahora necesito tu dirección de email para enviarte la confirmación de la cita.', 'bot');
+                    pasoCita = 3;
+                    break;
+                    
+                case 3: // Email
+                    datosCita.email = message;
+                    addMessage('Excelente. Ahora vamos a seleccionar la fecha de tu cita. ¿Qué día te viene mejor? Puedes elegir entre los próximos días disponibles.', 'bot');
+                    pasoCita = 4;
+                    setTimeout(() => {
+                        mostrarCalendario();
+                    }, 1000);
+                    break;
+                    
+                default:
+                    // Si no está en el flujo de citas, enviar al API normal
+                    sendToAPI(message);
+                    break;
+            }
+        }
+
+        // Variables para el flujo de citas
+        let datosCita = {
+            nombre: '',
+            telefono: '',
+            email: '',
+            tipo_cita: '',
+            fecha: '',
+            hora: ''
+        };
+        let pasoCita = 0; // 0: no iniciado, 1: nombre, 2: telefono, 3: email, 4: fecha, 5: hora
 
         // Enfocar el input al cargar la página
         document.addEventListener('DOMContentLoaded', function() {
@@ -835,6 +1044,186 @@
             adjustMobileHeight();
             window.addEventListener('resize', adjustMobileHeight);
         });
+
+        // Función para mostrar el calendario
+        function mostrarCalendario() {
+            fetch('/api/dias-disponibles')
+                .then(response => response.json())
+                .then(data => {
+                    const chatMessages = document.getElementById('chatMessages');
+                    const calendarDiv = document.createElement('div');
+                    calendarDiv.className = 'message bot-message';
+                    calendarDiv.innerHTML = `
+                        <div style="margin-bottom: 10px;">Selecciona una fecha disponible:</div>
+                        <div class="calendar-grid">
+                            ${generarCalendario(data.dias)}
+                        </div>
+                    `;
+                    chatMessages.appendChild(calendarDiv);
+                    chatMessages.scrollTop = chatMessages.scrollHeight;
+                })
+                .catch(error => {
+                    console.error('Error al cargar el calendario:', error);
+                });
+        }
+
+        // Función para generar el calendario
+        function generarCalendario(dias) {
+            const meses = ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 
+                          'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'];
+            const diasSemana = ['Lun', 'Mar', 'Mié', 'Jue', 'Vie', 'Sáb'];
+            
+            let html = '<div class="calendar-container">';
+            
+            // Agrupar días por mes
+            const diasPorMes = {};
+            dias.forEach(dia => {
+                const fecha = new Date(dia.fecha);
+                const mesKey = `${fecha.getFullYear()}-${fecha.getMonth()}`;
+                if (!diasPorMes[mesKey]) {
+                    diasPorMes[mesKey] = [];
+                }
+                diasPorMes[mesKey].push(dia);
+            });
+            
+            // Generar calendario para cada mes
+            Object.keys(diasPorMes).forEach(mesKey => {
+                const diasMes = diasPorMes[mesKey];
+                const primerDia = new Date(diasMes[0].fecha);
+                const nombreMes = meses[primerDia.getMonth()];
+                const año = primerDia.getFullYear();
+                
+                html += `
+                    <div class="month-calendar">
+                        <div class="month-title">${nombreMes} ${año}</div>
+                        <div class="calendar-header">
+                            ${diasSemana.map(dia => `<div class="calendar-day-header">${dia}</div>`).join('')}
+                        </div>
+                        <div class="calendar-days">
+                            ${generarDiasMes(diasMes)}
+                        </div>
+                    </div>
+                `;
+            });
+            
+            html += '</div>';
+            return html;
+        }
+
+        // Función para generar los días de un mes
+        function generarDiasMes(diasMes) {
+            let html = '';
+            const primerDia = new Date(diasMes[0].fecha);
+            const primerDiaSemana = primerDia.getDay() || 7; // 1 = Lunes, 7 = Domingo
+            
+            // Agregar espacios vacíos para alinear con los días de la semana
+            for (let i = 1; i < primerDiaSemana; i++) {
+                html += '<div class="calendar-day empty"></div>';
+            }
+            
+            // Agregar los días del mes
+            diasMes.forEach(dia => {
+                const fecha = new Date(dia.fecha);
+                html += `
+                    <div class="calendar-day available" onclick="seleccionarFecha('${dia.fecha}', this)">
+                        <div class="day-number">${fecha.getDate()}</div>
+                        <div class="day-name">${dia.dia_semana}</div>
+                    </div>
+                `;
+            });
+            
+            return html;
+        }
+
+        // Función para seleccionar fecha
+        function seleccionarFecha(fecha, element) {
+            // Remover selección anterior
+            document.querySelectorAll('.calendar-day.selected').forEach(day => {
+                day.classList.remove('selected');
+            });
+            
+            // Seleccionar nueva fecha
+            element.classList.add('selected');
+            datosCita.fecha = fecha;
+            
+            // Mostrar horas disponibles
+            setTimeout(() => {
+                mostrarHorasDisponibles(fecha);
+            }, 500);
+        }
+
+        // Función para mostrar horas disponibles
+        function mostrarHorasDisponibles(fecha) {
+            fetch(`/api/horas-disponibles/${fecha}`)
+                .then(response => response.json())
+                .then(data => {
+                    const chatMessages = document.getElementById('chatMessages');
+                    const horasDiv = document.createElement('div');
+                    horasDiv.className = 'message bot-message';
+                    horasDiv.innerHTML = `
+                        <div style="margin-bottom: 10px;">Selecciona una hora disponible:</div>
+                        <div class="hours-grid">
+                            ${data.horas.map(hora => `
+                                <button class="hour-btn" onclick="seleccionarHora('${hora}', this)">${hora}</button>
+                            `).join('')}
+                        </div>
+                    `;
+                    chatMessages.appendChild(horasDiv);
+                    chatMessages.scrollTop = chatMessages.scrollHeight;
+                })
+                .catch(error => {
+                    console.error('Error al cargar las horas:', error);
+                });
+        }
+
+        // Función para seleccionar hora
+        function seleccionarHora(hora, element) {
+            // Remover selección anterior
+            document.querySelectorAll('.hour-btn.selected').forEach(btn => {
+                btn.classList.remove('selected');
+            });
+            
+            // Seleccionar nueva hora
+            element.classList.add('selected');
+            datosCita.hora = hora;
+            
+            // Guardar la cita
+            setTimeout(() => {
+                guardarCita();
+            }, 500);
+        }
+
+        // Función para guardar la cita
+        function guardarCita() {
+            fetch('/api/guardar-cita-chat', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(datosCita)
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    addMessage(data.mensaje, 'bot');
+                    // Resetear datos para nueva cita
+                    datosCita = {
+                        nombre: '',
+                        telefono: '',
+                        email: '',
+                        tipo_cita: '',
+                        fecha: '',
+                        hora: ''
+                    };
+                    pasoCita = 0;
+                } else {
+                    addMessage('Error al guardar la cita. Por favor, inténtalo de nuevo.', 'bot');
+                }
+            })
+            .catch(error => {
+                addMessage('Error al guardar la cita. Por favor, inténtalo de nuevo.', 'bot');
+            });
+        }
     </script>
 </body>
 </html> 
