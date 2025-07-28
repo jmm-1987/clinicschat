@@ -374,6 +374,7 @@
             display: grid;
             grid-template-columns: repeat(6, 1fr);
             gap: 5px;
+            min-height: 200px;
         }
 
         .calendar-day {
@@ -388,6 +389,8 @@
             transition: all 0.3s ease;
             font-size: 11px;
             background: white;
+            min-height: 40px;
+            padding: 5px;
         }
 
         .calendar-day.available:hover {
@@ -406,16 +409,20 @@
             background: transparent;
             border: none;
             cursor: default;
+            min-height: 40px;
         }
 
         .day-number {
             font-weight: 600;
             font-size: 14px;
+            line-height: 1;
+            margin-bottom: 2px;
         }
 
         .day-name {
             font-size: 10px;
             opacity: 0.8;
+            line-height: 1;
         }
 
         /* Estilos para las horas */
@@ -452,9 +459,34 @@
         }
 
         /* Responsive para calendario */
+        @media (max-width: 768px) {
+            .month-calendar {
+                padding: 10px;
+            }
+            
+            .calendar-days {
+                min-height: 150px;
+            }
+            
+            .calendar-day {
+                min-height: 35px;
+                padding: 3px;
+            }
+            
+            .calendar-day.empty {
+                min-height: 35px;
+            }
+        }
+
         @media (max-width: 480px) {
             .calendar-day {
                 font-size: 10px;
+                min-height: 30px;
+                padding: 2px;
+            }
+            
+            .calendar-day.empty {
+                min-height: 30px;
             }
             
             .day-number {
@@ -1115,7 +1147,9 @@
         function generarDiasMes(diasMes) {
             let html = '';
             const primerDia = new Date(diasMes[0].fecha);
-            const primerDiaSemana = primerDia.getDay() || 7; // 1 = Lunes, 7 = Domingo
+            // Ajustar para que Lunes sea 1 y Domingo sea 7
+            let primerDiaSemana = primerDia.getDay();
+            if (primerDiaSemana === 0) primerDiaSemana = 7; // Domingo = 7
             
             // Agregar espacios vacíos para alinear con los días de la semana
             for (let i = 1; i < primerDiaSemana; i++) {
@@ -1125,16 +1159,19 @@
             // Agregar los días del mes
             diasMes.forEach(dia => {
                 const fecha = new Date(dia.fecha);
+                const diaSemana = dia.dia_semana;
                 html += `
                     <div class="calendar-day available" onclick="seleccionarFecha('${dia.fecha}', this)">
                         <div class="day-number">${fecha.getDate()}</div>
-                        <div class="day-name">${dia.dia_semana}</div>
+                        <div class="day-name">${diaSemana}</div>
                     </div>
                 `;
             });
             
             return html;
         }
+
+
 
         // Función para seleccionar fecha
         function seleccionarFecha(fecha, element) {
