@@ -138,6 +138,11 @@ def citas():
     tipo_cita = request.args.get('tipo', 'revision')
     return render_template('citas.html', tipo_cita=tipo_cita)
 
+@app.route('/admin')
+def admin():
+    """Página de administración de la base de datos"""
+    return render_template('admin.html')
+
 @app.route('/chat', methods=['POST'])
 def chat():
     try:
@@ -305,6 +310,115 @@ def api_guardar_cita_chat():
 @app.route('/health')
 def health():
     return jsonify({'status': 'ok', 'timestamp': datetime.now().isoformat()})
+
+@app.route('/download-database')
+def download_database():
+    """Descarga la base de datos SQLite"""
+    try:
+        from flask import send_file
+        import os
+        
+        db_path = 'citas.db'
+        
+        if not os.path.exists(db_path):
+            return jsonify({'error': 'Base de datos no encontrada'}), 404
+        
+        return send_file(
+            db_path,
+            as_attachment=True,
+            download_name=f'citas_database_{datetime.now().strftime("%Y%m%d_%H%M%S")}.db',
+            mimetype='application/octet-stream'
+        )
+        
+    except Exception as e:
+        return jsonify({'error': f'Error al descargar la base de datos: {str(e)}'}), 500
+
+@app.route('/api/database-stats')
+def database_stats():
+    """Obtiene estadísticas de la base de datos"""
+    try:
+        total_citas = Cita.query.count()
+        citas_pendientes = Cita.query.filter_by(estado='pendiente').count()
+        citas_confirmadas = Cita.query.filter_by(estado='confirmada').count()
+        citas_canceladas = Cita.query.filter_by(estado='cancelada').count()
+        
+        # Estadísticas por tipo de cita
+        revisiones = Cita.query.filter_by(tipo_cita='revision').count()
+        padecimientos = Cita.query.filter_by(tipo_cita='padecimiento').count()
+        
+        # Últimas 5 citas
+        ultimas_citas = Cita.query.order_by(Cita.fecha_creacion.desc()).limit(5).all()
+        ultimas_citas_data = []
+        for cita in ultimas_citas:
+            ultimas_citas_data.append({
+                'id': cita.id,
+                'nombre': cita.nombre,
+                'fecha': cita.fecha.strftime('%Y-%m-%d'),
+                'hora': cita.hora,
+                'tipo': cita.tipo_cita,
+                'estado': cita.estado,
+                'fecha_creacion': cita.fecha_creacion.strftime('%Y-%m-%d %H:%M:%S')
+            })
+        
+        return jsonify({
+            'total_citas': total_citas,
+            'citas_pendientes': citas_pendientes,
+            'citas_confirmadas': citas_confirmadas,
+            'citas_canceladas': citas_canceladas,
+            'revisiones': revisiones,
+            'padecimientos': padecimientos,
+            'ultimas_citas': ultimas_citas_data
+        })
+        
+    except Exception as e:
+        return jsonify({'error': f'Error al obtener estadísticas: {str(e)}'}), 500
+
+@app.route('/export-csv')
+def export_csv():
+    """Exporta la base de datos a CSV"""
+    try:
+        import csv
+        from io import StringIO
+        from flask import Response
+        
+        # Obtener todas las citas
+        citas = Cita.query.order_by(Cita.fecha_creacion.desc()).all()
+        
+        # Crear CSV en memoria
+        si = StringIO()
+        cw = csv.writer(si)
+        
+        # Escribir encabezados
+        cw.writerow(['ID', 'Nombre', 'Teléfono', 'Email', 'Tipo de Cita', 
+                     'Fecha', 'Hora', 'Estado', 'Fecha de Creación'])
+        
+        # Escribir datos
+        for cita in citas:
+            tipo_cita = 'Revisión General' if cita.tipo_cita == 'revision' else 'Padecimiento'
+            cw.writerow([
+                cita.id,
+                cita.nombre,
+                cita.telefono,
+                cita.email,
+                tipo_cita,
+                cita.fecha.strftime('%Y-%m-%d'),
+                cita.hora,
+                cita.estado,
+                cita.fecha_creacion.strftime('%Y-%m-%d %H:%M:%S')
+            ])
+        
+        # Crear respuesta
+        output = si.getvalue()
+        si.close()
+        
+        return Response(
+            output,
+            mimetype='text/csv',
+            headers={'Content-Disposition': f'attachment; filename=citas_export_{datetime.now().strftime("%Y%m%d_%H%M%S")}.csv'}
+        )
+        
+    except Exception as e:
+        return jsonify({'error': f'Error al exportar CSV: {str(e)}'}), 500
 
 # Crear la base de datos
 with app.app_context():

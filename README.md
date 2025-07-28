@@ -190,11 +190,23 @@ Modifica el CSS en `templates/index.html` para personalizar la apariencia.
 - `GET /api/dias-disponibles`: Obtiene días disponibles
 - `GET /api/horas-disponibles/<fecha>`: Obtiene horas disponibles para una fecha
 - `POST /api/guardar-cita`: Guarda una nueva cita
+- `POST /api/guardar-cita-chat`: Guarda una cita desde el chat
+- `GET /api/database-stats`: Obtiene estadísticas de la base de datos
+- `GET /download-database`: Descarga la base de datos SQLite
+- `GET /admin`: Página de administración de la base de datos
 
 ### Probar la Base de Datos:
 ```bash
 python test_database.py
 ```
+
+### Exportar Base de Datos:
+```bash
+python export_database.py
+```
+
+### Acceder a la Administración:
+Ve a `http://localhost:5000/admin` para acceder al panel de administración con estadísticas y opciones de descarga.
 
 ## Troubleshooting
 
