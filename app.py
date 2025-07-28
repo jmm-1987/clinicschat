@@ -40,21 +40,69 @@ RESPUESTAS_PREDEFINIDAS = {
     'tratamientos': '¿Sobre qué tratamiento específico te gustaría saber más?',
     
     # Tratamientos específicos
-    'limpieza dental': 'La limpieza dental profesional es fundamental para mantener la salud bucal. Este tratamiento elimina la placa bacteriana y el sarro que se acumula en los dientes y encías. La placa bacteriana se forma constantemente por bacterias que se adhieren a los dientes, y si no se elimina regularmente, puede causar caries y enfermedades de las encías. El proceso incluye la eliminación de sarro, pulido dental y aplicación de flúor. Es recomendable realizarla cada 6 meses para mantener una boca saludable.\n\nEs importante que sepas que cada caso es único y requiere una evaluación personalizada por parte de un profesional. Para determinar si este tratamiento es el más adecuado para tu situación específica, es fundamental que te evalúe un dentista profesional.',
+    'limpieza dental': {
+        'texto': 'La limpieza dental profesional es fundamental para mantener la salud bucal. Este tratamiento elimina la placa bacteriana y el sarro que se acumula en los dientes y encías. La placa bacteriana se forma constantemente por bacterias que se adhieren a los dientes, y si no se elimina regularmente, puede causar caries y enfermedades de las encías. El proceso incluye la eliminación de sarro, pulido dental y aplicación de flúor. Es recomendable realizarla cada 6 meses para mantener una boca saludable.\n\nEs importante que sepas que cada caso es único y requiere una evaluación personalizada por parte de un profesional. Para determinar si este tratamiento es el más adecuado para tu situación específica, es fundamental que te evalúe un dentista profesional.',
+        'imagenes': [
+            {'url': 'https://picsum.photos/400/300?random=1', 'alt': 'Antes de limpieza dental'},
+            {'url': 'https://picsum.photos/400/300?random=2', 'alt': 'Después de limpieza dental'}
+        ]
+    },
     
-    'empastes': 'Los empastes restauran dientes que han sido afectados por caries. La caries se desarrolla cuando las bacterias de la placa producen ácidos que desmineralizan el esmalte dental, creando cavidades. El proceso incluye la eliminación del tejido cariado y la restauración con materiales como composite o amalgama. Es importante tratar las caries temprano para evitar que lleguen al nervio del diente.\n\nEs importante que sepas que cada caso es único y requiere una evaluación personalizada por parte de un profesional. Para determinar si este tratamiento es el más adecuado para tu situación específica, es fundamental que te evalúe un dentista profesional.',
+    'empastes': {
+        'texto': 'Los empastes restauran dientes que han sido afectados por caries. La caries se desarrolla cuando las bacterias de la placa producen ácidos que desmineralizan el esmalte dental, creando cavidades. El proceso incluye la eliminación del tejido cariado y la restauración con materiales como composite o amalgama. Es importante tratar las caries temprano para evitar que lleguen al nervio del diente.\n\nEs importante que sepas que cada caso es único y requiere una evaluación personalizada por parte de un profesional. Para determinar si este tratamiento es el más adecuado para tu situación específica, es fundamental que te evalúe un dentista profesional.',
+        'imagenes': [
+            {'url': 'https://picsum.photos/400/300?random=3', 'alt': 'Antes de empaste'},
+            {'url': 'https://picsum.photos/400/300?random=4', 'alt': 'Después de empaste'}
+        ]
+    },
     
-    'ortodoncia': 'La ortodoncia corrige la posición de los dientes y la mordida. Los problemas de alineación pueden ser causados por factores genéticos, hábitos infantiles como chuparse el dedo o la pérdida prematura de dientes. El tratamiento aplica fuerzas controladas que mueven gradualmente los dientes a su posición correcta. Esto mejora tanto la estética como la función masticatoria.\n\nEs importante que sepas que cada caso es único y requiere una evaluación personalizada por parte de un profesional. Para determinar si este tratamiento es el más adecuado para tu situación específica, es fundamental que te evalúe un dentista profesional.',
+    'ortodoncia': {
+        'texto': 'La ortodoncia corrige la posición de los dientes y la mordida. Los problemas de alineación pueden ser causados por factores genéticos, hábitos infantiles como chuparse el dedo o la pérdida prematura de dientes. El tratamiento aplica fuerzas controladas que mueven gradualmente los dientes a su posición correcta. Esto mejora tanto la estética como la función masticatoria.\n\nEs importante que sepas que cada caso es único y requiere una evaluación personalizada por parte de un profesional. Para determinar si este tratamiento es el más adecuado para tu situación específica, es fundamental que te evalúe un dentista profesional.',
+        'imagenes': [
+            {'url': 'https://picsum.photos/400/300?random=5', 'alt': 'Antes de ortodoncia'},
+            {'url': 'https://picsum.photos/400/300?random=6', 'alt': 'Después de ortodoncia'}
+        ]
+    },
     
-    'cirugía oral': 'La cirugía oral trata problemas que no pueden resolverse con tratamientos convencionales. Incluye extracciones complejas, extracción de muelas del juicio impactadas, y cirugías para tratar infecciones o lesiones. Los problemas pueden surgir por dientes impactados, infecciones avanzadas o traumatismos. El proceso incluye anestesia local y técnicas quirúrgicas especializadas.\n\nEs importante que sepas que cada caso es único y requiere una evaluación personalizada por parte de un profesional. Para determinar si este tratamiento es el más adecuado para tu situación específica, es fundamental que te evalúe un dentista profesional.',
+    'cirugía oral': {
+        'texto': 'La cirugía oral trata problemas que no pueden resolverse con tratamientos convencionales. Incluye extracciones complejas, extracción de muelas del juicio impactadas, y cirugías para tratar infecciones o lesiones. Los problemas pueden surgir por dientes impactados, infecciones avanzadas o traumatismos. El proceso incluye anestesia local y técnicas quirúrgicas especializadas.\n\nEs importante que sepas que cada caso es único y requiere una evaluación personalizada por parte de un profesional. Para determinar si este tratamiento es el más adecuado para tu situación específica, es fundamental que te evalúe un dentista profesional.',
+        'imagenes': [
+            {'url': 'https://picsum.photos/400/300?random=7', 'alt': 'Antes de cirugía oral'},
+            {'url': 'https://picsum.photos/400/300?random=8', 'alt': 'Después de cirugía oral'}
+        ]
+    },
     
-    'blanqueamiento': 'El blanqueamiento dental aclara el color de los dientes eliminando manchas superficiales y profundas. Las manchas pueden ser causadas por alimentos, bebidas, tabaco o el envejecimiento natural. El proceso utiliza agentes blanqueadores que penetran el esmalte y descomponen las moléculas que causan las manchas. Es un tratamiento estético que mejora la apariencia de la sonrisa.\n\nEs importante que sepas que cada caso es único y requiere una evaluación personalizada por parte de un profesional. Para determinar si este tratamiento es el más adecuado para tu situación específica, es fundamental que te evalúe un dentista profesional.',
+    'blanqueamiento': {
+        'texto': 'El blanqueamiento dental aclara el color de los dientes eliminando manchas superficiales y profundas. Las manchas pueden ser causadas por alimentos, bebidas, tabaco o el envejecimiento natural. El proceso utiliza agentes blanqueadores que penetran el esmalte y descomponen las moléculas que causan las manchas. Es un tratamiento estético que mejora la apariencia de la sonrisa.\n\nEs importante que sepas que cada caso es único y requiere una evaluación personalizada por parte de un profesional. Para determinar si este tratamiento es el más adecuado para tu situación específica, es fundamental que te evalúe un dentista profesional.',
+        'imagenes': [
+            {'url': 'https://picsum.photos/400/300?random=9', 'alt': 'Antes de blanqueamiento'},
+            {'url': 'https://picsum.photos/400/300?random=10', 'alt': 'Después de blanqueamiento'}
+        ]
+    },
     
-    'endodoncia': 'La endodoncia trata dientes con infección en el nervio o pulpa dental. Esto ocurre cuando las caries avanzan hasta el nervio, causando dolor e infección. El proceso incluye la eliminación del tejido infectado, limpieza de los conductos radiculares y sellado para prevenir nuevas infecciones. Salva dientes que de otra manera tendrían que extraerse.\n\nEs importante que sepas que cada caso es único y requiere una evaluación personalizada por parte de un profesional. Para determinar si este tratamiento es el más adecuado para tu situación específica, es fundamental que te evalúe un dentista profesional.',
+    'endodoncia': {
+        'texto': 'La endodoncia trata dientes con infección en el nervio o pulpa dental. Esto ocurre cuando las caries avanzan hasta el nervio, causando dolor e infección. El proceso incluye la eliminación del tejido infectado, limpieza de los conductos radiculares y sellado para prevenir nuevas infecciones. Salva dientes que de otra manera tendrían que extraerse.\n\nEs importante que sepas que cada caso es único y requiere una evaluación personalizada por parte de un profesional. Para determinar si este tratamiento es el más adecuado para tu situación específica, es fundamental que te evalúe un dentista profesional.',
+        'imagenes': [
+            {'url': 'https://picsum.photos/400/300?random=11', 'alt': 'Antes de endodoncia'},
+            {'url': 'https://picsum.photos/400/300?random=12', 'alt': 'Después de endodoncia'}
+        ]
+    },
     
-    'periodoncia': 'La periodoncia trata las enfermedades de las encías y el hueso que sostiene los dientes. La gingivitis y la periodontitis son causadas por la acumulación de placa bacteriana que inflama las encías y puede destruir el hueso. El tratamiento incluye limpieza profunda de las raíces dentales y control de la infección bacteriana.\n\nEs importante que sepas que cada caso es único y requiere una evaluación personalizada por parte de un profesional. Para determinar si este tratamiento es el más adecuado para tu situación específica, es fundamental que te evalúe un dentista profesional.',
+    'periodoncia': {
+        'texto': 'La periodoncia trata las enfermedades de las encías y el hueso que sostiene los dientes. La gingivitis y la periodontitis son causadas por la acumulación de placa bacteriana que inflama las encías y puede destruir el hueso. El tratamiento incluye limpieza profunda de las raíces dentales y control de la infección bacteriana.\n\nEs importante que sepas que cada caso es único y requiere una evaluación personalizada por parte de un profesional. Para determinar si este tratamiento es el más adecuado para tu situación específica, es fundamental que te evalúe un dentista profesional.',
+        'imagenes': [
+            {'url': 'https://picsum.photos/400/300?random=13', 'alt': 'Antes de periodoncia'},
+            {'url': 'https://picsum.photos/400/300?random=14', 'alt': 'Después de periodoncia'}
+        ]
+    },
     
-    'implantes dentales': 'Los implantes dentales reemplazan dientes perdidos con raíces artificiales de titanio. La pérdida de dientes puede ser causada por caries avanzadas, enfermedad periodontal o traumatismos. El proceso incluye la colocación quirúrgica del implante en el hueso, que se integra con el tiempo, y luego la colocación de la corona dental. Restauran tanto la función como la estética.\n\nEs importante que sepas que cada caso es único y requiere una evaluación personalizada por parte de un profesional. Para determinar si este tratamiento es el más adecuado para tu situación específica, es fundamental que te evalúe un dentista profesional.',
+    'implantes dentales': {
+        'texto': 'Los implantes dentales reemplazan dientes perdidos con raíces artificiales de titanio. La pérdida de dientes puede ser causada por caries avanzadas, enfermedad periodontal o traumatismos. El proceso incluye la colocación quirúrgica del implante en el hueso, que se integra con el tiempo, y luego la colocación de la corona dental. Restauran tanto la función como la estética.\n\nEs importante que sepas que cada caso es único y requiere una evaluación personalizada por parte de un profesional. Para determinar si este tratamiento es el más adecuado para tu situación específica, es fundamental que te evalúe un dentista profesional.',
+        'imagenes': [
+            {'url': 'https://picsum.photos/400/300?random=15', 'alt': 'Antes de implantes'},
+            {'url': 'https://picsum.photos/400/300?random=16', 'alt': 'Después de implantes'}
+        ]
+    },
     
     # Solicitud de citas
     'solicitar una cita': '¿Ya tienes un tratamiento abierto con nuestra clínica?',
@@ -84,8 +132,79 @@ RESPUESTAS_PREDEFINIDAS = {
     'teléfono': 'Nuestro teléfono de contacto es +34 900 123 456.',
     'contacto': 'Nuestro teléfono de contacto es +34 900 123 456.',
     
+    # Financiación
+    'información sobre financiación': {
+        'texto': '💰 **OPCIONES DE FINANCIACIÓN DISPONIBLES**\n\nEn nuestra clínica dental ofrecemos varias opciones de financiación para que puedas acceder a los tratamientos que necesitas:\n\n━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n\n💳 **FINANCIACIÓN SIN INTERESES**\n• Hasta 12 meses sin intereses\n• Para tratamientos superiores a 500€\n• Sin comisiones ocultas\n\n🏦 **FINANCIACIÓN BANCARIA**\n• Colaboración con entidades bancarias\n• Préstamos personales con condiciones especiales\n• Términos flexibles según tu perfil\n\n📋 **PAGO A PLAZOS**\n• Cuotas mensuales personalizadas\n• Sin intereses adicionales\n• Según el tipo de tratamiento\n\n💎 **DESCUENTOS POR PAGO AL CONTADO**\n• 5% de descuento inmediato\n• Al pagar el tratamiento completo\n• Ahorro garantizado\n\n━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n\n📞 **¿Necesitas más información?**\nContacta con nosotros al +34 900 123 456\n\n📍 **Consulta en cualquiera de nuestras clínicas**\nNuestro personal te asesorará personalmente',
+        'imagenes': [
+            {'url': 'https://picsum.photos/400/300?random=17', 'alt': 'Opciones de financiación'},
+            {'url': 'https://picsum.photos/400/300?random=18', 'alt': 'Beneficios de financiación'}
+        ]
+    },
+    'financiación': '💰 **¿Te gustaría conocer nuestras opciones de financiación?**\n\nTenemos varias alternativas flexibles para que puedas acceder a los tratamientos que necesitas sin preocupaciones económicas.',
+    'pago': '💳 **OPCIONES DE PAGO DISPONIBLES**\n\n• Financiación sin intereses (hasta 12 meses)\n• Pago a plazos personalizado\n• Descuentos por pago al contado (5%)\n• Colaboración con entidades bancarias',
+    'precio': '💰 **INFORMACIÓN SOBRE PRECIOS**\n\nLos precios varían según el tratamiento específico.\n\n📋 **Te recomendamos:**\n• Agendar una consulta personalizada\n• Evaluar tu caso individualmente\n• Recibir un presupuesto detallado\n\n📞 Contacta con nosotros para más información',
+    'coste': '💵 **SOBRE LOS COSTES DE TRATAMIENTOS**\n\nLos costes dependen del tratamiento específico que necesites.\n\n✅ **Ofrecemos financiación flexible** para que puedas acceder a los tratamientos que requieres sin problemas económicos.',
+    
+    # Preguntas frecuentes
+    'preguntas frecuentes': {
+        'texto': '❓ **PREGUNTAS FRECUENTES**\n\nAquí tienes las preguntas más frecuentes que recibimos de nuestros pacientes. Haz clic en la pregunta que te interese para ver la respuesta detallada:\n\n━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━',
+        'imagenes': [
+            {'url': 'https://picsum.photos/400/300?random=19', 'alt': 'Preguntas frecuentes'},
+            {'url': 'https://picsum.photos/400/300?random=20', 'alt': 'Información útil'}
+        ],
+        'mostrar_botones_faq': True
+    },
+    'faq': '❓ **PREGUNTAS FRECUENTES**\n\nAquí tienes las preguntas más frecuentes que recibimos de nuestros pacientes.\n\n💬 **¿Hay alguna en particular que te interese?**',
+    'pregunta': '❓ **¿Qué pregunta específica tienes?**\n\nEstoy aquí para ayudarte con cualquier duda sobre tratamientos, procedimientos o servicios.',
+    'duración': '⏱️ **DURACIÓN DE TRATAMIENTOS**\n\nLa duración varía según el caso específico.\n\n📋 **¿Sobre qué tratamiento quieres saber?**\n• Limpieza dental: 30-45 minutos\n• Ortodoncia: 18-24 meses\n• Blanqueamiento: 1-2 sesiones\n• Empastes: 30-60 minutos',
+    'dolor': '🦷 **SOBRE EL DOLOR EN TRATAMIENTOS**\n\n✅ **La mayoría de tratamientos son mínimamente invasivos**\n• No causan dolor significativo\n• Usamos técnicas modernas y suaves\n• Anestesia local cuando es necesario\n• Tu comodidad es nuestra prioridad',
+    'emergencia': '🚨 **EMERGENCIAS DENTALES**\n\n📞 **Para emergencias fuera de horario:**\n• Teléfono: +34 900 123 456\n• Atención 24/7 para urgencias\n• Te atenderemos de inmediato\n\n⚠️ **¿Tienes una emergencia ahora?**',
+    
+    # Respuestas individuales de preguntas frecuentes
+    'limpieza dental duración': {
+        'texto': '⏱️ **DURACIÓN DE LIMPIEZA DENTAL**\n\n━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n\n📋 **Información detallada:**\n\n• **Duración total:** 30-45 minutos\n• **Incluye:** Eliminación de sarro y pulido\n• **Frecuencia recomendada:** Cada 6 meses\n• **Proceso:** Completamente indoloro\n\n💡 **¿Por qué es importante?**\nLa limpieza dental profesional elimina la placa bacteriana y el sarro que no se puede quitar con el cepillado normal, previniendo caries y enfermedades de las encías.\n\n📞 **¿Quieres agendar tu limpieza?**\nContacta con nosotros al +34 900 123 456',
+        'imagenes': [
+            {'url': 'https://picsum.photos/400/300?random=21', 'alt': 'Limpieza dental profesional'}
+        ]
+    },
+    
+    'blanqueamiento dolor': {
+        'texto': '🦷 **BLANQUEAMIENTO DENTAL - SIN DOLOR**\n\n━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n\n✅ **Información importante:**\n\n• **¿Es doloroso?** No, no es doloroso\n• **Sensibilidad:** Puede causar sensibilidad temporal\n• **Técnicas:** Usamos técnicas suaves y modernas\n• **Duración:** 1-2 sesiones de 45-60 minutos\n\n💡 **¿Qué esperar?**\nEl blanqueamiento utiliza agentes blanqueadores que pueden causar sensibilidad temporal, pero no dolor. Nuestros especialistas usan técnicas avanzadas para minimizar cualquier molestia.\n\n📞 **¿Quieres consultar sobre blanqueamiento?**\nContacta con nosotros al +34 900 123 456',
+        'imagenes': [
+            {'url': 'https://picsum.photos/400/300?random=22', 'alt': 'Blanqueamiento dental'}
+        ]
+    },
+    
+    'ortodoncia duración': {
+        'texto': '⏰ **DURACIÓN DE TRATAMIENTO DE ORTODONCIA**\n\n━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n\n📋 **Información detallada:**\n\n• **Duración promedio:** 18-24 meses\n• **Varía según:** Complejidad del caso\n• **Revisiones:** Mensuales incluidas\n• **Tipos:** Brackets metálicos, cerámicos, invisibles\n\n💡 **Factores que influyen:**\n- Gravedad del problema de alineación\n- Edad del paciente\n- Tipo de ortodoncia elegida\n- Cooperación del paciente\n\n📞 **¿Quieres una consulta de ortodoncia?**\nContacta con nosotros al +34 900 123 456',
+        'imagenes': [
+            {'url': 'https://picsum.photos/400/300?random=23', 'alt': 'Tratamiento de ortodoncia'}
+        ]
+    },
+    
+    'empaste anestesia': {
+        'texto': '💉 **ANESTESIA EN EMPASTES**\n\n━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n\n📋 **Información detallada:**\n\n• **¿Siempre necesito anestesia?** No\n• **Cuándo se usa:** Solo si la caries es profunda\n• **La mayoría:** Se realizan sin anestesia\n• **Proceso:** Rápido y cómodo\n\n💡 **¿Por qué no siempre es necesaria?**\nLos empastes modernos se realizan con técnicas mínimamente invasivas. Solo se aplica anestesia cuando la caries está cerca del nervio dental.\n\n📞 **¿Tienes dolor de muela?**\nContacta con nosotros al +34 900 123 456',
+        'imagenes': [
+            {'url': 'https://picsum.photos/400/300?random=24', 'alt': 'Empaste dental'}
+        ]
+    },
+    
+    'frecuencia visitas': {
+        'texto': '📅 **FRECUENCIA DE VISITAS AL DENTISTA**\n\n━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n\n📋 **Recomendaciones:**\n\n• **Revisiones generales:** Cada 6 meses\n• **Limpieza dental:** Cada 6 meses\n• **Pacientes con problemas:** Cada 3-4 meses\n• **Ortodoncia:** Mensual\n\n💡 **¿Por qué es importante?**\nLas revisiones regulares permiten detectar problemas temprano, cuando son más fáciles de tratar. La prevención es siempre mejor que el tratamiento.\n\n📞 **¿Quieres agendar tu revisión?**\nContacta con nosotros al +34 900 123 456',
+        'imagenes': [
+            {'url': 'https://picsum.photos/400/300?random=25', 'alt': 'Revisión dental'}
+        ]
+    },
+    
+    'emergencia dolor': {
+        'texto': '🚨 **EMERGENCIAS DENTALES - DOLOR FUERA DE HORARIO**\n\n━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n\n📞 **Información de contacto:**\n\n• **Teléfono de emergencias:** +34 900 123 456\n• **Atención:** 24/7 para urgencias\n• **Respuesta:** Inmediata\n• **Servicio:** Gratuito para emergencias\n\n💡 **¿Qué se considera una emergencia?**\n- Dolor dental intenso\n- Traumatismos dentales\n- Infecciones con hinchazón\n- Fracturas dentales\n\n⚠️ **¿Tienes una emergencia ahora?**\nLlama inmediatamente al +34 900 123 456',
+        'imagenes': [
+            {'url': 'https://picsum.photos/400/300?random=26', 'alt': 'Emergencia dental'}
+        ]
+    }
+    
     # Respuesta por defecto
-    'default': 'Gracias por tu mensaje. Si necesitas información sobre tratamientos, puedes hacer clic en "Información sobre tratamientos". Si quieres agendar una cita, puedes hacer clic en "Solicitar una cita". Y si quieres ver nuestras ubicaciones, puedes hacer clic en "Ver ubicaciones".'
+    'default': 'Gracias por tu mensaje. Si necesitas información sobre tratamientos, puedes hacer clic en "Información sobre tratamientos". Si quieres agendar una cita, puedes hacer clic en "Solicitar una cita". Si quieres conocer nuestras opciones de financiación, puedes hacer clic en "Información sobre financiación". Si tienes preguntas generales, puedes hacer clic en "Preguntas frecuentes". Y si quieres ver nuestras ubicaciones, puedes hacer clic en "Ver ubicaciones".'
 }
 
 # Sistema de estado de conversación
@@ -249,15 +368,29 @@ def obtener_respuesta(mensaje, estado_actual='inicial', datos_cita=None):
                 'limpiar_pantalla': True
             }
         # Si el usuario pregunta sobre otro tratamiento
-        elif any(palabra in mensaje_lower for palabra in ['limpieza', 'empaste', 'ortodoncia', 'cirugía', 'blanqueamiento', 'endodoncia', 'periodoncia', 'implante']):
+        elif any(palabra in mensaje_lower for palabra in ['limpieza', 'empaste', 'ortodoncia', 'cirugía', 'cirugía oral', 'blanqueamiento', 'endodoncia', 'periodoncia', 'implante', 'implantes']):
+            print(f"Buscando tratamiento en mensaje: '{mensaje_lower}'")
             # Buscar la respuesta correspondiente en RESPUESTAS_PREDEFINIDAS
+            print(f"Claves disponibles: {list(RESPUESTAS_PREDEFINIDAS.keys())}")
             for clave, respuesta in RESPUESTAS_PREDEFINIDAS.items():
-                if clave in mensaje_lower:
-                    return {
-                        'respuesta': respuesta,
-                        'estado': ESTADOS_CONVERSACION['en_menu_tratamientos'],
-                        'datos_cita': datos_cita
-                    }
+                # Buscar coincidencias más flexibles
+                if clave in mensaje_lower or any(palabra in mensaje_lower for palabra in clave.split()):
+                    print(f"Encontrada clave: '{clave}' en mensaje")
+                    # Manejar respuestas con estructura compleja (con imágenes)
+                    if isinstance(respuesta, dict):
+                        print(f"Devolviendo respuesta con imágenes para {clave}: {respuesta.get('imagenes', [])}")
+                        return {
+                            'respuesta': respuesta['texto'],
+                            'imagenes': respuesta.get('imagenes', []),
+                            'estado': ESTADOS_CONVERSACION['en_menu_tratamientos'],
+                            'datos_cita': datos_cita
+                        }
+                    else:
+                        return {
+                            'respuesta': respuesta,
+                            'estado': ESTADOS_CONVERSACION['en_menu_tratamientos'],
+                            'datos_cita': datos_cita
+                        }
         # Si no coincide con nada, mantener en el menú de tratamientos
         return {
             'respuesta': '¿Sobre qué tratamiento específico te gustaría saber más? Tenemos: limpieza dental, empastes, ortodoncia, cirugía oral, blanqueamiento, endodoncia, periodoncia, implantes dentales y otros tratamientos especializados.',
@@ -269,23 +402,35 @@ def obtener_respuesta(mensaje, estado_actual='inicial', datos_cita=None):
     # Buscar coincidencias exactas primero
     for clave, respuesta in RESPUESTAS_PREDEFINIDAS.items():
         if clave in mensaje_lower:
+            # Manejar respuestas con estructura compleja (con imágenes)
+            if isinstance(respuesta, dict):
+                respuesta_texto = respuesta['texto']
+                imagenes = respuesta.get('imagenes', [])
+                print(f"Encontrada respuesta con imágenes para '{clave}': {len(imagenes)} imágenes")
+            else:
+                respuesta_texto = respuesta
+                imagenes = []
+            
             # Si es una solicitud de cita, cambiar el estado
             if clave in ['solicitar una cita', 'quiero una cita', 'necesito una cita', 'agendar cita', 'sí, quiero agendar una cita']:
                 return {
-                    'respuesta': respuesta,
+                    'respuesta': respuesta_texto,
+                    'imagenes': imagenes,
                     'estado': ESTADOS_CONVERSACION['preguntando_tratamiento_abierto'],
                     'datos_cita': datos_cita
                 }
             # Si es información sobre tratamientos, cambiar al estado de menú de tratamientos
             elif clave in ['información sobre tratamientos', 'tratamientos']:
                 return {
-                    'respuesta': respuesta,
+                    'respuesta': respuesta_texto,
+                    'imagenes': imagenes,
                     'estado': ESTADOS_CONVERSACION['en_menu_tratamientos'],
                     'datos_cita': datos_cita
                 }
             else:
                 return {
-                    'respuesta': respuesta,
+                    'respuesta': respuesta_texto,
+                    'imagenes': imagenes,
                     'estado': ESTADOS_CONVERSACION['inicial'],
                     'datos_cita': datos_cita
                 }
@@ -307,6 +452,20 @@ def obtener_respuesta(mensaje, estado_actual='inicial', datos_cita=None):
         'implante': 'implantes dentales',
         'cita': 'solicitar una cita',
         'agendar': 'solicitar una cita',
+        'financiación': 'información sobre financiación',
+        'financiar': 'información sobre financiación',
+        'pago': 'pago',
+        'precio': 'precio',
+        'coste': 'coste',
+        'costo': 'coste',
+        'cuota': 'información sobre financiación',
+        'plazo': 'información sobre financiación',
+        'pregunta': 'preguntas frecuentes',
+        'frecuente': 'preguntas frecuentes',
+        'faq': 'preguntas frecuentes',
+        'duración': 'duración',
+        'dolor': 'dolor',
+        'emergencia': 'emergencia',
         'ubicación': 'ubicaciones',
         'dirección': 'ubicaciones',
         'horario': 'horarios',
@@ -317,16 +476,26 @@ def obtener_respuesta(mensaje, estado_actual='inicial', datos_cita=None):
     for palabra, respuesta_clave in palabras_clave.items():
         if palabra in mensaje_lower:
             respuesta = RESPUESTAS_PREDEFINIDAS[respuesta_clave]
+            # Manejar respuestas con estructura compleja (con imágenes)
+            if isinstance(respuesta, dict):
+                respuesta_texto = respuesta['texto']
+                imagenes = respuesta.get('imagenes', [])
+            else:
+                respuesta_texto = respuesta
+                imagenes = []
+            
             # Si es una solicitud de cita, cambiar el estado
             if respuesta_clave == 'solicitar una cita':
                 return {
-                    'respuesta': respuesta,
+                    'respuesta': respuesta_texto,
+                    'imagenes': imagenes,
                     'estado': ESTADOS_CONVERSACION['preguntando_tratamiento_abierto'],
                     'datos_cita': datos_cita
                 }
             else:
                 return {
-                    'respuesta': respuesta,
+                    'respuesta': respuesta_texto,
+                    'imagenes': imagenes,
                     'estado': ESTADOS_CONVERSACION['inicial'],
                     'datos_cita': datos_cita
                 }
@@ -337,35 +506,6 @@ def obtener_respuesta(mensaje, estado_actual='inicial', datos_cita=None):
         'estado': ESTADOS_CONVERSACION['inicial'],
         'datos_cita': datos_cita
     }
-    palabras_clave = {
-        'hola': 'hola',
-        'buenos días': 'buenos días',
-        'buenas tardes': 'buenas tardes',
-        'buenas noches': 'buenas noches',
-        'tratamiento': 'información sobre tratamientos',
-        'limpieza': 'limpieza dental',
-        'empaste': 'empastes',
-        'ortodoncia': 'ortodoncia',
-        'cirugía': 'cirugía oral',
-        'blanqueamiento': 'blanqueamiento',
-        'endodoncia': 'endodoncia',
-        'periodoncia': 'periodoncia',
-        'implante': 'implantes dentales',
-        'cita': 'solicitar una cita',
-        'agendar': 'solicitar una cita',
-        'ubicación': 'ubicaciones',
-        'dirección': 'ubicaciones',
-        'horario': 'horarios',
-        'teléfono': 'teléfono',
-        'contacto': 'teléfono'
-    }
-    
-    for palabra, respuesta_clave in palabras_clave.items():
-        if palabra in mensaje_lower:
-            return RESPUESTAS_PREDEFINIDAS[respuesta_clave]
-    
-    # Si no hay coincidencias, devolver respuesta por defecto
-    return RESPUESTAS_PREDEFINIDAS['default']
 
 # Configuración del chatbot
 CHATBOT_CONFIG = {
@@ -503,6 +643,7 @@ def chat():
             'mostrar_horas': resultado.get('mostrar_horas', False),
             'mostrar_confirmacion': resultado.get('mostrar_confirmacion', False),
             'mostrar_input_padecimiento': resultado.get('mostrar_input_padecimiento', False),
+            'mostrar_botones_faq': resultado.get('mostrar_botones_faq', False),
             'cita_guardada': resultado.get('cita_guardada', False),
             'limpiar_pantalla': resultado.get('limpiar_pantalla', False),
             'timestamp': datetime.now().isoformat()
@@ -522,7 +663,7 @@ def get_dias_disponibles():
         # Excluir domingos (6 = domingo)
         if fecha.weekday() != 6:
             dias.append({
-                'fecha': fecha.strftime('%Y-%m-%d'),
+                'fecha': fecha.strftime('%d/%m/%Y'),
                 'dia_semana': fecha.strftime('%A'),
                 'dia_mes': fecha.day,
                 'mes': fecha.strftime('%B')
@@ -691,11 +832,11 @@ def database_stats():
             ultimas_citas_data.append({
                 'id': cita.id,
                 'nombre': cita.nombre,
-                'fecha': cita.fecha.strftime('%Y-%m-%d'),
+                'fecha': cita.fecha.strftime('%d/%m/%Y'),
                 'hora': cita.hora,
                 'tipo': cita.tipo_cita,
                 'estado': cita.estado,
-                'fecha_creacion': cita.fecha_creacion.strftime('%Y-%m-%d %H:%M:%S')
+                'fecha_creacion': cita.fecha_creacion.strftime('%d/%m/%Y %H:%M:%S')
             })
         
         return jsonify({
@@ -739,10 +880,10 @@ def export_csv():
                 cita.telefono,
                 cita.email,
                 tipo_cita,
-                cita.fecha.strftime('%Y-%m-%d'),
+                cita.fecha.strftime('%d/%m/%Y'),
                 cita.hora,
                 cita.estado,
-                cita.fecha_creacion.strftime('%Y-%m-%d %H:%M:%S')
+                cita.fecha_creacion.strftime('%d/%m/%Y %H:%M:%S')
             ])
         
         # Crear respuesta
@@ -772,10 +913,10 @@ def api_citas():
                 'telefono': cita.telefono,
                 'email': cita.email,
                 'tipo_cita': cita.tipo_cita,
-                'fecha': cita.fecha.strftime('%Y-%m-%d'),
+                'fecha': cita.fecha.strftime('%d/%m/%Y'),
                 'hora': cita.hora,
                 'estado': cita.estado,
-                'fecha_creacion': cita.fecha_creacion.strftime('%Y-%m-%d %H:%M:%S')
+                'fecha_creacion': cita.fecha_creacion.strftime('%d/%m/%Y %H:%M:%S')
             })
         
         return jsonify({'citas': citas_data})

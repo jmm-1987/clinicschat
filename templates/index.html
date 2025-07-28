@@ -938,6 +938,41 @@
         .chat-messages::-webkit-scrollbar-thumb:hover {
             background: #a8a8a8;
         }
+
+        /* Estilos para las imágenes de tratamientos */
+        .treatment-images {
+            display: flex;
+            gap: 10px;
+            margin-top: 10px;
+            overflow-x: auto;
+            padding: 5px;
+            -webkit-overflow-scrolling: touch;
+        }
+
+        .treatment-images img {
+            width: 150px;
+            height: 120px;
+            object-fit: cover;
+            border-radius: 8px;
+            border: 2px solid #e9ecef;
+            transition: transform 0.3s ease;
+        }
+
+        .treatment-images img:hover {
+            transform: scale(1.05);
+        }
+
+        @media (max-width: 768px) {
+            .treatment-images {
+                gap: 8px;
+                padding: 3px;
+            }
+            
+            .treatment-images img {
+                width: 120px;
+                height: 100px;
+            }
+        }
     </style>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 </head>
@@ -969,6 +1004,14 @@
                 <button class="action-btn" onclick="sendQuickMessage('Solicitar una cita')">
                     <i class="fas fa-calendar-alt" style="color: #9c27b0;"></i>
                     Solicitar una cita
+                </button>
+                <button class="action-btn" onclick="sendQuickMessage('Información sobre financiación')">
+                    <i class="fas fa-credit-card" style="color: #ff9800;"></i>
+                    Información sobre financiación
+                </button>
+                <button class="action-btn" onclick="sendQuickMessage('Preguntas frecuentes')">
+                    <i class="fas fa-question-circle" style="color: #4caf50;"></i>
+                    Preguntas frecuentes
                 </button>
                 <button class="action-btn" onclick="showLocations()">
                     <i class="fas fa-map-marker-alt" style="color: #f44336;"></i>
@@ -1082,6 +1125,8 @@
             // Limpiar el chat y activar botón volver si es una opción del menú principal
             if (message === 'Información sobre tratamientos' || 
                 message === 'Solicitar una cita' || 
+                message === 'Información sobre financiación' ||
+                message === 'Preguntas frecuentes' ||
                 message === 'Ver ubicaciones') {
                 limpiarChat();
                 activarBotonVolver();
@@ -1099,6 +1144,8 @@
                 // Limpiar el chat y activar botón volver si es una opción del menú principal
                 if (message === 'Información sobre tratamientos' || 
                     message === 'Solicitar una cita' || 
+                    message === 'Información sobre financiación' ||
+                    message === 'Preguntas frecuentes' ||
                     message === 'Ver ubicaciones') {
                     limpiarChat();
                     activarBotonVolver();
@@ -1116,11 +1163,46 @@
             }
         }
 
-        function addMessage(message, sender, showQuickReplies = false, showFormButton = false, showCalendar = false, showHours = false, showConfirmation = false, showInputPadecimiento = false) {
+        function addMessage(message, sender, showQuickReplies = false, showFormButton = false, showCalendar = false, showHours = false, showConfirmation = false, showInputPadecimiento = false, imagenes = [], showBotonesFAQ = false) {
             const chatMessages = document.getElementById('chatMessages');
             const messageDiv = document.createElement('div');
             messageDiv.className = `message ${sender}-message`;
-            messageDiv.textContent = message;
+            
+            // Crear el contenido del mensaje
+            const messageContent = document.createElement('div');
+            messageContent.textContent = message;
+            messageDiv.appendChild(messageContent);
+            
+            // Agregar imágenes si existen
+            console.log('addMessage - imágenes recibidas:', imagenes);
+            if (imagenes && imagenes.length > 0) {
+                console.log('Creando contenedor de imágenes con', imagenes.length, 'imágenes');
+                const imagesContainer = document.createElement('div');
+                imagesContainer.className = 'treatment-images';
+                imagesContainer.style.cssText = 'display: flex; gap: 10px; margin-top: 10px; overflow-x: auto; padding: 5px;';
+                
+                imagenes.forEach((img, index) => {
+                    console.log('Procesando imagen:', img);
+                    const imgDiv = document.createElement('div');
+                    imgDiv.style.cssText = 'flex-shrink: 0; text-align: center;';
+                    
+                    const imgElement = document.createElement('img');
+                    imgElement.src = img.url;
+                    imgElement.alt = img.alt;
+                    imgElement.style.cssText = 'width: 150px; height: 120px; object-fit: cover; border-radius: 8px; border: 2px solid #e9ecef;';
+                    
+                    const caption = document.createElement('div');
+                    caption.textContent = img.alt;
+                    caption.style.cssText = 'font-size: 12px; color: #666; margin-top: 5px; text-align: center;';
+                    
+                    imgDiv.appendChild(imgElement);
+                    imgDiv.appendChild(caption);
+                    imagesContainer.appendChild(imgDiv);
+                });
+                
+                messageDiv.appendChild(imagesContainer);
+                console.log('Contenedor de imágenes agregado al mensaje');
+            }
             
             // Agregar botones de respuesta rápida si es necesario
             if (showQuickReplies && sender === 'bot') {
@@ -1207,6 +1289,33 @@
                 messageDiv.appendChild(confirmationDiv);
             }
             
+            // Agregar botones de FAQ si es necesario
+            if (showBotonesFAQ && sender === 'bot') {
+                const faqDiv = document.createElement('div');
+                faqDiv.className = 'quick-reply-buttons';
+                faqDiv.innerHTML = `
+                    <button class="quick-reply-btn" onclick="sendQuickMessage('limpieza dental duración')">
+                        ⏱️ ¿Cuánto dura una limpieza?
+                    </button>
+                    <button class="quick-reply-btn" onclick="sendQuickMessage('blanqueamiento dolor')">
+                        🦷 ¿Es doloroso el blanqueamiento?
+                    </button>
+                    <button class="quick-reply-btn" onclick="sendQuickMessage('ortodoncia duración')">
+                        ⏰ ¿Cuánto dura la ortodoncia?
+                    </button>
+                    <button class="quick-reply-btn" onclick="sendQuickMessage('empaste anestesia')">
+                        💉 ¿Necesito anestesia para empaste?
+                    </button>
+                    <button class="quick-reply-btn" onclick="sendQuickMessage('frecuencia visitas')">
+                        📅 ¿Con qué frecuencia debo ir?
+                    </button>
+                    <button class="quick-reply-btn" onclick="sendQuickMessage('emergencia dolor')">
+                        🚨 ¿Qué hago en emergencia?
+                    </button>
+                `;
+                messageDiv.appendChild(faqDiv);
+            }
+            
             chatMessages.appendChild(messageDiv);
             chatMessages.scrollTop = chatMessages.scrollHeight;
         }
@@ -1279,19 +1388,22 @@
                     const showConfirmation = data.mostrar_confirmacion;
                     const limpiarPantalla = data.limpiar_pantalla;
                     const showInputPadecimiento = data.mostrar_input_padecimiento;
+                    const showBotonesFAQ = data.mostrar_botones_faq;
                     
                     console.log('Backend response:', data);
                     console.log('showInputPadecimiento:', showInputPadecimiento);
+                    console.log('showBotonesFAQ:', showBotonesFAQ);
                     
                     // Si se debe limpiar la pantalla, hacerlo antes de agregar el mensaje
                     if (limpiarPantalla) {
                         document.getElementById('chatMessages').innerHTML = '';
                     }
                     
-                    addMessage(data.response, 'bot', showQuickReplies, false, showCalendar, showHours, showConfirmation, showInputPadecimiento);
+                    addMessage(data.response, 'bot', showQuickReplies, false, showCalendar, showHours, showConfirmation, showInputPadecimiento, data.imagenes || [], showBotonesFAQ);
                     
                     // Debug: mostrar la respuesta del chatbot
                     console.log('Respuesta del chatbot:', data.response);
+                    console.log('Imágenes recibidas:', data.imagenes);
                     
 
                 }
@@ -1339,6 +1451,7 @@
             email: '',
             tipo_cita: '',
             fecha: '',
+            fechaMostrar: '',
             hora: ''
         };
         let estadoConversacion = 'inicial';
@@ -1346,20 +1459,24 @@
 
         // Enfocar el input al cargar la página
         document.addEventListener('DOMContentLoaded', function() {
-            document.getElementById('messageInput').focus();
+            // El input está comentado, así que no intentamos enfocarlo
+            // document.getElementById('messageInput').focus();
             
             // Manejar el teclado virtual en móviles
             const messageInput = document.getElementById('messageInput');
             const chatContainer = document.querySelector('.chat-container');
             
-            // Ajustar la vista cuando aparece el teclado virtual
-            messageInput.addEventListener('focus', function() {
-                if (window.innerWidth <= 768) {
-                    setTimeout(() => {
-                        chatContainer.scrollIntoView({ behavior: 'smooth', block: 'end' });
-                    }, 300);
-                }
-            });
+            // Solo agregar event listener si el elemento existe
+            if (messageInput) {
+                // Ajustar la vista cuando aparece el teclado virtual
+                messageInput.addEventListener('focus', function() {
+                    if (window.innerWidth <= 768) {
+                        setTimeout(() => {
+                            chatContainer.scrollIntoView({ behavior: 'smooth', block: 'end' });
+                        }, 300);
+                    }
+                });
+            }
             
             // Prevenir zoom en iOS
             document.addEventListener('gesturestart', function(e) {
@@ -1577,6 +1694,13 @@
             mostrarCalendarioChat();
         }
 
+        function formatearFecha(fecha) {
+            const dia = fecha.getDate().toString().padStart(2, '0');
+            const mes = (fecha.getMonth() + 1).toString().padStart(2, '0');
+            const año = fecha.getFullYear();
+            return `${dia}/${mes}/${año}`;
+        }
+
         function seleccionarFechaChat(fecha, elemento) {
             // Remover selección anterior
             document.querySelectorAll('#calendar-days-chat .calendar-day.selected').forEach(day => {
@@ -1585,7 +1709,8 @@
             
             // Seleccionar nueva fecha
             elemento.classList.add('selected');
-            datosCita.fecha = fecha.toISOString().split('T')[0];
+            datosCita.fecha = fecha.toISOString().split('T')[0]; // Mantener formato interno YYYY-MM-DD
+            datosCita.fechaMostrar = formatearFecha(fecha); // Formato para mostrar DD/MM/YYYY
             
             // Mostrar directamente las horas disponibles
             setTimeout(() => {
@@ -1602,7 +1727,7 @@
                 const formDiv = document.createElement('div');
                 formDiv.className = 'message bot-message';
                 formDiv.innerHTML = `
-                    <div style="margin-bottom: 15px;">Perfecto, has seleccionado ${datosCita.fecha} a las ${hora}. Ahora necesito tus datos personales:</div>
+                    <div style="margin-bottom: 15px;">Perfecto, has seleccionado ${datosCita.fechaMostrar} a las ${hora}. Ahora necesito tus datos personales:</div>
                     <div class="form-container" style="max-width: 400px; margin: 0 auto;">
                         <div class="form-group">
                             <label for="nombreInput">Nombre completo:</label>
@@ -1727,7 +1852,7 @@
                 <div style="margin-bottom: 15px;">¡Excelente! Aquí tienes el resumen de tu cita:</div>
                 <div class="form-container" style="max-width: 400px; margin: 0 auto;">
                     <div class="resumen-item">
-                        <strong>📅 Fecha:</strong> ${datosCita.fecha}
+                        <strong>📅 Fecha:</strong> ${datosCita.fechaMostrar}
                     </div>
                     <div class="resumen-item">
                         <strong>🕐 Hora:</strong> ${datosCita.hora}
@@ -1772,6 +1897,7 @@
                 email: '',
                 tipo_cita: '',
                 fecha: '',
+                fechaMostrar: '',
                 hora: ''
             };
         }
@@ -1813,6 +1939,7 @@
                 email: '',
                 tipo_cita: '',
                 fecha: '',
+                fechaMostrar: '',
                 hora: ''
             };
             pasoCita = 0;

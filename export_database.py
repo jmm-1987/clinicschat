@@ -36,10 +36,10 @@ def export_to_csv():
                     'Teléfono': cita.telefono,
                     'Email': cita.email,
                     'Tipo de Cita': tipo_cita,
-                    'Fecha': cita.fecha.strftime('%Y-%m-%d'),
+                    'Fecha': cita.fecha.strftime('%d/%m/%Y'),
                     'Hora': cita.hora,
                     'Estado': cita.estado,
-                    'Fecha de Creación': cita.fecha_creacion.strftime('%Y-%m-%d %H:%M:%S')
+                    'Fecha de Creación': cita.fecha_creacion.strftime('%d/%m/%Y %H:%M:%S')
                 })
         
         print(f"✅ Base de datos exportada exitosamente a: {filename}")
