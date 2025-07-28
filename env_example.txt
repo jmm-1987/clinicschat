@@ -1,6 +1,4 @@
-# Configuración del chatbot (ya no requiere OpenAI)
-# SECRET_KEY=tu-clave-secreta-aqui
-
-# Configuración del servidor Flask
-FLASK_ENV=development
-FLASK_DEBUG=1 
+# Variables de entorno para la aplicación
+SECRET_KEY=tu-clave-secreta-aqui
+FLASK_ENV=production
+PORT=5000 

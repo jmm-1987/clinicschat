@@ -788,4 +788,7 @@ with app.app_context():
     db.create_all()
 
 if __name__ == '__main__':
-    app.run(debug=True, host='0.0.0.0', port=5000) 
+    # Configuración para desarrollo local
+    debug_mode = os.getenv('FLASK_ENV') == 'development'
+    port = int(os.getenv('PORT', 5000))
+    app.run(debug=debug_mode, host='0.0.0.0', port=port) 
