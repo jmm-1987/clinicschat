@@ -2,7 +2,7 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
     <title>{{ config.clinic_name }} - Chatbot</title>
     <style>
         * {
@@ -36,14 +36,20 @@
             body {
                 padding: 0;
                 margin: 0;
-                height: 100vh;
+                height: 100%;
+                min-height: 100vh;
                 overflow: hidden;
+                /* Manejo específico para barras de navegación móviles */
+                height: 100vh;
+                height: -webkit-fill-available;
             }
             
             .chat-container {
                 max-width: 100%;
                 width: 100%;
-                height: 100vh;
+                height: 100%;
+                min-height: 100vh;
+                min-height: -webkit-fill-available;
                 border-radius: 0;
                 box-shadow: none;
                 display: flex;
@@ -57,7 +63,7 @@
             
             .chat-body {
                 flex: 1;
-                padding: 15px 15px 25px 15px;
+                padding: 15px 15px 30px 15px;
                 max-height: none;
                 display: flex;
                 flex-direction: column;
@@ -843,6 +849,19 @@
                 width: 35px;
                 height: 35px;
                 font-size: 14px;
+            }
+        }
+
+        /* Manejo específico para dispositivos con notch o barras de navegación */
+        @supports (padding: max(0px)) {
+            body {
+                padding-left: max(0px, env(safe-area-inset-left));
+                padding-right: max(0px, env(safe-area-inset-right));
+                padding-bottom: max(0px, env(safe-area-inset-bottom));
+            }
+            
+            .chat-container {
+                padding-bottom: max(0px, env(safe-area-inset-bottom));
             }
         }
 
