@@ -201,7 +201,7 @@ RESPUESTAS_PREDEFINIDAS = {
         'imagenes': [
             {'url': 'https://picsum.photos/400/300?random=26', 'alt': 'Emergencia dental'}
         ]
-    }
+    },
     
     # Respuesta por defecto
     'default': 'Gracias por tu mensaje. Si necesitas información sobre tratamientos, puedes hacer clic en "Información sobre tratamientos". Si quieres agendar una cita, puedes hacer clic en "Solicitar una cita". Si quieres conocer nuestras opciones de financiación, puedes hacer clic en "Información sobre financiación". Si tienes preguntas generales, puedes hacer clic en "Preguntas frecuentes". Y si quieres ver nuestras ubicaciones, puedes hacer clic en "Ver ubicaciones".'
