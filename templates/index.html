@@ -951,7 +951,7 @@
                     }
                     
                     // Verificar si inicia el flujo de citas
-                    if (data.response.includes('¿Podrías proporcionarme tu nombre completo?')) {
+                    if (data.response.includes('seleccionar la fecha y hora') || data.response.includes('fecha y hora que te venga mejor')) {
                         pasoCita = 1;
                         // Determinar tipo de cita basado en el contexto
                         if (data.response.includes('revisión general')) {
@@ -959,6 +959,9 @@
                         } else {
                             datosCita.tipo_cita = 'padecimiento';
                         }
+                        setTimeout(() => {
+                            mostrarCalendario();
+                        }, 1000);
                     }
                 }
             } catch (error) {
@@ -972,7 +975,7 @@
         // Función para manejar el flujo de citas
         function manejarFlujoCitas(message) {
             switch (pasoCita) {
-                case 1: // Nombre
+                case 1: // Fecha y hora ya seleccionadas, ahora pedir nombre
                     datosCita.nombre = message;
                     addMessage(`Gracias ${message}. Ahora necesito tu número de teléfono de contacto.`, 'bot');
                     pasoCita = 2;
@@ -986,11 +989,9 @@
                     
                 case 3: // Email
                     datosCita.email = message;
-                    addMessage('Excelente. Ahora vamos a seleccionar la fecha de tu cita. ¿Qué día te viene mejor? Puedes elegir entre los próximos días disponibles.', 'bot');
-                    pasoCita = 4;
-                    setTimeout(() => {
-                        mostrarCalendario();
-                    }, 1000);
+                    addMessage('¡Excelente! Tu cita ha sido programada exitosamente. Recibirás una confirmación por email.', 'bot');
+                    // Guardar la cita en la base de datos
+                    guardarCitaFinal();
                     break;
                     
                 default:
@@ -1009,7 +1010,7 @@
             fecha: '',
             hora: ''
         };
-        let pasoCita = 0; // 0: no iniciado, 1: nombre, 2: telefono, 3: email, 4: fecha, 5: hora
+        let pasoCita = 0; // 0: no iniciado, 1: fecha/hora, 2: nombre, 3: telefono, 4: email
 
         // Enfocar el input al cargar la página
         document.addEventListener('DOMContentLoaded', function() {
@@ -1187,14 +1188,54 @@
             element.classList.add('selected');
             datosCita.hora = hora;
             
-            // Guardar la cita
+            // Continuar con el flujo de datos
             setTimeout(() => {
-                guardarCita();
+                const chatMessages = document.getElementById('chatMessages');
+                const confirmDiv = document.createElement('div');
+                confirmDiv.className = 'message bot-message';
+                confirmDiv.innerHTML = `
+                    <div style="margin-bottom: 10px;">Perfecto. Ahora necesito algunos datos para completar tu cita. ¿Podrías proporcionarme tu nombre completo?</div>
+                `;
+                chatMessages.appendChild(confirmDiv);
+                chatMessages.scrollTop = chatMessages.scrollHeight;
+                pasoCita = 1; // Iniciar flujo de datos
             }, 500);
         }
 
         // Función para guardar la cita
         function guardarCita() {
+            fetch('/api/guardar-cita-chat', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(datosCita)
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    addMessage(data.mensaje, 'bot');
+                    // Resetear datos para nueva cita
+                    datosCita = {
+                        nombre: '',
+                        telefono: '',
+                        email: '',
+                        tipo_cita: '',
+                        fecha: '',
+                        hora: ''
+                    };
+                    pasoCita = 0;
+                } else {
+                    addMessage('Error al guardar la cita. Por favor, inténtalo de nuevo.', 'bot');
+                }
+            })
+            .catch(error => {
+                addMessage('Error al guardar la cita. Por favor, inténtalo de nuevo.', 'bot');
+            });
+        }
+
+        // Función para guardar la cita al final del flujo
+        function guardarCitaFinal() {
             fetch('/api/guardar-cita-chat', {
                 method: 'POST',
                 headers: {
