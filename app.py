@@ -91,10 +91,12 @@ IMPLANTES DENTALES:
 "Los implantes dentales reemplazan dientes perdidos con raíces artificiales de titanio. La pérdida de dientes puede ser causada por caries avanzadas, enfermedad periodontal o traumatismos. El proceso incluye la colocación quirúrgica del implante en el hueso, que se integra con el tiempo, y luego la colocación de la corona dental. Restauran tanto la función como la estética."
 
 Después de explicar cualquier tratamiento, siempre añade:
-"Es importante que sepas que cada caso es único y requiere una evaluación personalizada por parte de un profesional. Para determinar si este tratamiento es el más adecuado para tu situación específica, es fundamental que te evalúe un dentista profesional. ¿Te gustaría que te ayude a programar una cita para que un especialista pueda revisar tu caso personalmente?"
+"Es importante que sepas que cada caso es único y requiere una evaluación personalizada por parte de un profesional. Para determinar si este tratamiento es el más adecuado para tu situación específica, es fundamental que te evalúe un dentista profesional. 
+
+¿Te gustaría agendar una cita para que un especialista pueda revisar tu caso personalmente? Si es así, puedes hacer clic en el botón 'Solicitar una cita' que aparece en la parte superior del chat."
 
 FLUJO PARA SOLICITAR CITAS:
-Cuando el paciente diga "Solicitar una cita", "Quiero una cita", "Necesito una cita", "Agendar cita" o cualquier variación similar, SIEMPRE debes preguntar primero:
+Cuando el paciente diga "Solicitar una cita", "Quiero una cita", "Necesito una cita", "Agendar cita", "Sí, quiero agendar una cita" o cualquier variación similar, SIEMPRE debes preguntar primero:
 "¿Ya tienes un tratamiento abierto con nuestra clínica?"
 
 Si el paciente responde SÍ o que ya tiene tratamiento:
@@ -145,6 +147,11 @@ def citas():
 def admin():
     """Página de administración de la base de datos"""
     return render_template('admin.html')
+
+@app.route('/panel')
+def panel():
+    """Panel de atención al cliente"""
+    return render_template('panel.html')
 
 @app.route('/chat', methods=['POST'])
 def chat():
@@ -422,6 +429,31 @@ def export_csv():
         
     except Exception as e:
         return jsonify({'error': f'Error al exportar CSV: {str(e)}'}), 500
+
+@app.route('/api/citas')
+def api_citas():
+    """API para obtener todas las citas"""
+    try:
+        citas = Cita.query.order_by(Cita.fecha, Cita.hora).all()
+        citas_data = []
+        
+        for cita in citas:
+            citas_data.append({
+                'id': cita.id,
+                'nombre': cita.nombre,
+                'telefono': cita.telefono,
+                'email': cita.email,
+                'tipo_cita': cita.tipo_cita,
+                'fecha': cita.fecha.strftime('%Y-%m-%d'),
+                'hora': cita.hora,
+                'estado': cita.estado,
+                'fecha_creacion': cita.fecha_creacion.strftime('%Y-%m-%d %H:%M:%S')
+            })
+        
+        return jsonify({'citas': citas_data})
+        
+    except Exception as e:
+        return jsonify({'error': f'Error al obtener citas: {str(e)}'}), 500
 
 # Crear la base de datos
 with app.app_context():

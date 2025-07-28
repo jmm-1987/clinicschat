@@ -192,8 +192,11 @@ Modifica el CSS en `templates/index.html` para personalizar la apariencia.
 - `POST /api/guardar-cita`: Guarda una nueva cita
 - `POST /api/guardar-cita-chat`: Guarda una cita desde el chat
 - `GET /api/database-stats`: Obtiene estadísticas de la base de datos
+- `GET /api/citas`: Obtiene todas las citas para el panel
 - `GET /download-database`: Descarga la base de datos SQLite
+- `GET /export-csv`: Exporta citas a CSV
 - `GET /admin`: Página de administración de la base de datos
+- `GET /panel`: Panel de atención al cliente
 
 ### Probar la Base de Datos:
 ```bash
@@ -207,6 +210,9 @@ python export_database.py
 
 ### Acceder a la Administración:
 Ve a `http://localhost:5000/admin` para acceder al panel de administración con estadísticas y opciones de descarga.
+
+### Acceder al Panel de Atención:
+Ve a `http://localhost:5000/panel` para acceder al panel de atención al cliente con calendario diario, semanal y mensual.
 
 ## Troubleshooting
 

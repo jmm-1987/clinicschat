@@ -920,6 +920,11 @@
                         <button class="quick-reply-btn" onclick="sendQuickMessage('Periodoncia')">Periodoncia</button>
                         <button class="quick-reply-btn" onclick="sendQuickMessage('Implantes dentales')">Implantes dentales</button>
                     `;
+                } else if (message.includes('¿Te gustaría agendar una cita para que un especialista pueda revisar tu caso personalmente?')) {
+                    quickRepliesDiv.innerHTML = `
+                        <button class="quick-reply-btn" onclick="sendQuickMessage('Sí, quiero agendar una cita')">Sí, quiero agendar una cita</button>
+                        <button class="quick-reply-btn" onclick="sendQuickMessage('No, gracias')">No, gracias</button>
+                    `;
                 }
                 
                 messageDiv.appendChild(quickRepliesDiv);
@@ -972,8 +977,12 @@
                     // Verificar si el mensaje contiene preguntas que requieren botones de respuesta rápida
                     const showQuickReplies = data.response.includes('¿Ya tienes un tratamiento abierto con nuestra clínica?') || 
                                            data.response.includes('¿Tu cita es para una revisión general periódica o tienes algún padecimiento específico?') ||
-                                           data.response.includes('¿Sobre qué tratamiento específico te gustaría saber más?');
+                                           data.response.includes('¿Sobre qué tratamiento específico te gustaría saber más?') ||
+                                           data.response.includes('¿Te gustaría agendar una cita para que un especialista pueda revisar tu caso personalmente?');
                     addMessage(data.response, 'bot', showQuickReplies);
+                    
+                    // Debug: mostrar la respuesta del chatbot
+                    console.log('Respuesta del chatbot:', data.response);
                     
                     // Verificar si el mensaje menciona selección de fecha
                     if (data.response.includes('seleccionar la fecha de tu cita') || data.response.includes('¿Qué día te viene mejor?')) {
@@ -984,12 +993,15 @@
                     
                     // Verificar si inicia el flujo de citas
                     if (data.response.includes('seleccionar la fecha y hora') || data.response.includes('fecha y hora que te venga mejor')) {
+                        console.log('Iniciando flujo de citas');
                         pasoCita = 1;
                         // Determinar tipo de cita basado en el contexto
                         if (data.response.includes('revisión general')) {
                             datosCita.tipo_cita = 'revision';
+                            console.log('Tipo de cita: revision');
                         } else {
                             datosCita.tipo_cita = 'padecimiento';
+                            console.log('Tipo de cita: padecimiento');
                         }
                         setTimeout(() => {
                             mostrarCalendario();
