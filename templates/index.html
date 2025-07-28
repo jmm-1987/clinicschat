@@ -781,6 +781,18 @@
                     const showQuickReplies = data.response.includes('¿Ya tienes un tratamiento abierto con nuestra clínica?') || 
                                            data.response.includes('¿Tu cita es para una revisión general periódica o tienes algún padecimiento específico?');
                     addMessage(data.response, 'bot', showQuickReplies);
+                    
+                    // Verificar si el mensaje menciona el formulario de citas
+                    if (data.response.includes('formulario de programación de citas')) {
+                        setTimeout(() => {
+                            // Determinar el tipo de cita basado en el contexto
+                            let tipoCita = 'revision';
+                            if (data.response.includes('padecimiento')) {
+                                tipoCita = 'padecimiento';
+                            }
+                            window.open(`/citas?tipo=${tipoCita}`, '_blank');
+                        }, 2000);
+                    }
                 }
             } catch (error) {
                 hideTypingIndicator();

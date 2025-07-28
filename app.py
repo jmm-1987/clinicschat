@@ -1,16 +1,35 @@
-from flask import Flask, render_template, request, jsonify
+from flask import Flask, render_template, request, jsonify, session
 import os
 import openai
-from datetime import datetime
+from datetime import datetime, timedelta
 from dotenv import load_dotenv
+from flask_sqlalchemy import SQLAlchemy
 
 # Cargar variables de entorno
 load_dotenv()
 
 app = Flask(__name__)
+app.config['SECRET_KEY'] = os.getenv('SECRET_KEY', 'tu-clave-secreta-aqui')
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///citas.db'
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+
+# Inicializar SQLAlchemy
+db = SQLAlchemy(app)
 
 # Configurar OpenAI
 openai.api_key = os.getenv('OPENAI_API_KEY')
+
+# Modelo de la base de datos
+class Cita(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    nombre = db.Column(db.String(100), nullable=False)
+    telefono = db.Column(db.String(20), nullable=False)
+    email = db.Column(db.String(100), nullable=False)
+    tipo_cita = db.Column(db.String(50), nullable=False)  # 'revision' o 'padecimiento'
+    fecha = db.Column(db.Date, nullable=False)
+    hora = db.Column(db.String(10), nullable=False)
+    estado = db.Column(db.String(20), default='pendiente')  # 'pendiente', 'confirmada', 'cancelada'
+    fecha_creacion = db.Column(db.DateTime, default=datetime.utcnow)
 
 # Configuración del chatbot
 CHATBOT_CONFIG = {
@@ -58,10 +77,12 @@ CHATBOT_CONFIG = {
     - Responde: "Entendido, te ayudo a solicitar una nueva cita. ¿Tu cita es para una revisión general periódica o tienes algún padecimiento específico que te gustaría consultar?"
     
     Si el paciente dice que es para revisión general periódica:
-    - Responde: "Perfecto, una revisión general es fundamental para mantener tu salud dental. Para programar tu cita de revisión, necesito algunos datos. ¿Podrías proporcionarme tu nombre completo y un número de teléfono de contacto?"
+    - Responde: "Perfecto, una revisión general es fundamental para mantener tu salud dental. Te voy a abrir nuestro formulario de programación de citas donde podrás seleccionar fecha, hora y proporcionar tus datos de contacto. El sistema te guiará paso a paso."
     
     Si el paciente menciona algún padecimiento específico:
-    - Responde: "Entiendo tu situación. Es importante que un profesional evalúe tu caso personalmente para determinar el tratamiento más adecuado. Para programar tu cita de consulta, necesito algunos datos. ¿Podrías proporcionarme tu nombre completo y un número de teléfono de contacto?"
+    - Responde: "Entiendo tu situación. Es importante que un profesional evalúe tu caso personalmente para determinar el tratamiento más adecuado. Te voy a abrir nuestro formulario de programación de citas donde podrás seleccionar fecha, hora y proporcionar tus datos de contacto. El sistema te guiará paso a paso."
+    
+    IMPORTANTE: Cuando el paciente quiera programar una cita, debes indicar que se abrirá un formulario de programación de citas y que el sistema los guiará paso a paso. NO pidas datos de contacto en el chat, el formulario se encargará de eso.
     
     Cuando el paciente pregunte sobre ubicaciones, puedes mencionar que tenemos clínicas en estas ciudades y que pueden ver las ubicaciones exactas haciendo clic en el botón "Ver ubicaciones" que abrirá un modal con todas las ubicaciones y enlaces directos a Google Maps.
     
@@ -71,6 +92,11 @@ CHATBOT_CONFIG = {
 @app.route('/')
 def index():
     return render_template('index.html', config=CHATBOT_CONFIG)
+
+@app.route('/citas')
+def citas():
+    tipo_cita = request.args.get('tipo', 'revision')
+    return render_template('citas.html', tipo_cita=tipo_cita)
 
 @app.route('/chat', methods=['POST'])
 def chat():
@@ -102,9 +128,115 @@ def chat():
     except Exception as e:
         return jsonify({'error': f'Error en el servidor: {str(e)}'}), 500
 
+# Funciones para manejar citas
+def get_dias_disponibles():
+    """Obtiene los próximos 30 días disponibles (excluyendo domingos)"""
+    dias = []
+    fecha_actual = datetime.now().date()
+    
+    for i in range(1, 31):
+        fecha = fecha_actual + timedelta(days=i)
+        # Excluir domingos (6 = domingo)
+        if fecha.weekday() != 6:
+            dias.append({
+                'fecha': fecha.strftime('%Y-%m-%d'),
+                'dia_semana': fecha.strftime('%A'),
+                'dia_mes': fecha.day,
+                'mes': fecha.strftime('%B')
+            })
+    
+    return dias
+
+def get_horas_disponibles(fecha_str):
+    """Obtiene las horas disponibles para una fecha específica"""
+    fecha = datetime.strptime(fecha_str, '%Y-%m-%d').date()
+    
+    # Horarios de la clínica: 9:00-18:00 (L-V), 9:00-14:00 (S)
+    es_sabado = fecha.weekday() == 5
+    hora_fin = 14 if es_sabado else 18
+    
+    horas = []
+    hora_actual = 9
+    
+    while hora_actual < hora_fin:
+        hora_str = f"{hora_actual:02d}:00"
+        hora_media_str = f"{hora_actual:02d}:30"
+        
+        # Verificar si la hora está ocupada
+        cita_existente = Cita.query.filter_by(
+            fecha=fecha,
+            hora=hora_str,
+            estado='pendiente'
+        ).first()
+        
+        if not cita_existente:
+            horas.append(hora_str)
+        
+        # Verificar la media hora
+        cita_existente_media = Cita.query.filter_by(
+            fecha=fecha,
+            hora=hora_media_str,
+            estado='pendiente'
+        ).first()
+        
+        if not cita_existente_media:
+            horas.append(hora_media_str)
+        
+        hora_actual += 1
+    
+    return horas
+
+@app.route('/api/dias-disponibles')
+def api_dias_disponibles():
+    """API para obtener días disponibles"""
+    dias = get_dias_disponibles()
+    return jsonify({'dias': dias})
+
+@app.route('/api/horas-disponibles/<fecha>')
+def api_horas_disponibles(fecha):
+    """API para obtener horas disponibles para una fecha"""
+    horas = get_horas_disponibles(fecha)
+    return jsonify({'horas': horas})
+
+@app.route('/api/guardar-cita', methods=['POST'])
+def api_guardar_cita():
+    """API para guardar una cita"""
+    try:
+        data = request.get_json()
+        
+        # Crear nueva cita
+        nueva_cita = Cita(
+            nombre=data['nombre'],
+            telefono=data['telefono'],
+            email=data['email'],
+            tipo_cita=data['tipo_cita'],
+            fecha=datetime.strptime(data['fecha'], '%Y-%m-%d').date(),
+            hora=data['hora']
+        )
+        
+        db.session.add(nueva_cita)
+        db.session.commit()
+        
+        return jsonify({
+            'success': True,
+            'cita_id': nueva_cita.id,
+            'mensaje': 'Cita guardada exitosamente'
+        })
+        
+    except Exception as e:
+        db.session.rollback()
+        return jsonify({
+            'success': False,
+            'error': str(e)
+        }), 400
+
 @app.route('/health')
 def health():
     return jsonify({'status': 'ok', 'timestamp': datetime.now().isoformat()})
+
+# Crear la base de datos
+with app.app_context():
+    db.create_all()
 
 if __name__ == '__main__':
     app.run(debug=True, host='0.0.0.0', port=5000) 

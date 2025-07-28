@@ -10,6 +10,9 @@ Un chatbot inteligente para clínicas dentales construido con Flask y OpenAI, op
 - ⚡ Botones de acción rápida para consultas comunes
 - 🔒 Configuración segura con variables de entorno
 - 📊 Indicador de escritura en tiempo real
+- 📅 Sistema completo de programación de citas
+- 🗄️ Base de datos SQLite para almacenar citas
+- 📋 Calendario interactivo con días y horas disponibles
 
 ## Instalación
 
@@ -100,6 +103,7 @@ Si prefieres configurar manualmente:
 
 ### Variables de entorno requeridas
 - `OPENAI_API_KEY`: Tu clave API de OpenAI (obligatoria)
+- `SECRET_KEY`: Clave secreta para sesiones (opcional, se genera automáticamente)
 
 ## Estructura del Proyecto
 
@@ -109,17 +113,36 @@ clinicschat/
 ├── requirements.txt       # Dependencias de Python
 ├── env_example.txt       # Ejemplo de variables de entorno
 ├── README.md             # Este archivo
+├── test_database.py      # Script de prueba de la base de datos
+├── citas.db              # Base de datos SQLite (se crea automáticamente)
 └── templates/
-    └── index.html        # Plantilla HTML del chatbot
+    ├── index.html        # Plantilla HTML del chatbot
+    └── citas.html        # Plantilla HTML del formulario de citas
 ```
 
 ## Características del Chatbot
 
 ### Funcionalidades
-- **Información sobre tratamientos**: Proporciona detalles sobre servicios dentales
-- **Solicitud de citas**: Ayuda con el proceso de agendar citas
+- **Información educativa sobre tratamientos**: Proporciona información sobre causas y procesos (sin recomendaciones médicas)
+- **Sistema completo de citas**: Programación paso a paso con calendario interactivo
 - **Ubicaciones**: Información sobre las ubicaciones de la clínica
 - **Chat libre**: Conversación natural con el asistente
+
+### Nuevo Sistema de Citas
+
+#### Flujo de Programación:
+1. **Chat inicial**: El chatbot pregunta si es revisión general o padecimiento específico
+2. **Formulario de citas**: Se abre automáticamente un formulario paso a paso
+3. **Datos del paciente**: Nombre, teléfono y email
+4. **Selección de fecha**: Calendario con próximos 30 días disponibles
+5. **Selección de hora**: Horarios disponibles en tramos de 30 minutos
+6. **Confirmación**: Resumen de la cita y botón de confirmar
+7. **Guardado**: La cita se guarda en la base de datos
+
+#### Horarios de la Clínica:
+- **Lunes a Viernes**: 9:00 - 18:00
+- **Sábados**: 9:00 - 14:00
+- **Domingos**: Cerrado
 
 ### Diseño Responsivo
 - Optimizado para dispositivos móviles
@@ -149,6 +172,29 @@ Edita la variable `system_prompt` en `app.py` para personalizar las respuestas d
 
 ### Cambiar colores y estilos
 Modifica el CSS en `templates/index.html` para personalizar la apariencia.
+
+## Base de Datos
+
+### Estructura de la Tabla Cita:
+- `id`: Identificador único
+- `nombre`: Nombre completo del paciente
+- `telefono`: Número de teléfono
+- `email`: Dirección de email
+- `tipo_cita`: 'revision' o 'padecimiento'
+- `fecha`: Fecha de la cita
+- `hora`: Hora de la cita
+- `estado`: 'pendiente', 'confirmada', 'cancelada'
+- `fecha_creacion`: Fecha de creación del registro
+
+### API Endpoints:
+- `GET /api/dias-disponibles`: Obtiene días disponibles
+- `GET /api/horas-disponibles/<fecha>`: Obtiene horas disponibles para una fecha
+- `POST /api/guardar-cita`: Guarda una nueva cita
+
+### Probar la Base de Datos:
+```bash
+python test_database.py
+```
 
 ## Troubleshooting
 
