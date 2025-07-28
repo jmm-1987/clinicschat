@@ -2,7 +2,7 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>{{ config.clinic_name }} - Chatbot</title>
     <style>
         * {
@@ -313,6 +313,27 @@
             transform: scale(1.05);
         }
 
+        /* Mejoras para dispositivos táctiles */
+        @media (hover: none) and (pointer: coarse) {
+            .action-btn:hover,
+            .quick-reply-btn:hover,
+            .location-item:hover {
+                transform: none;
+            }
+            
+            .send-btn:hover {
+                transform: none;
+            }
+            
+            .action-btn:active,
+            .quick-reply-btn:active,
+            .location-item:active,
+            .send-btn:active {
+                transform: scale(0.95);
+                opacity: 0.8;
+            }
+        }
+
         .send-btn:disabled {
             background: #ccc;
             cursor: not-allowed;
@@ -325,19 +346,190 @@
             font-style: italic;
         }
 
-        @media (max-width: 480px) {
+        @media (max-width: 768px) {
+            body {
+                padding: 0;
+                background: white;
+            }
+            
             .chat-container {
                 max-width: 100%;
+                width: 100%;
+                height: calc(var(--vh, 1vh) * 100);
                 border-radius: 0;
-                height: 100vh;
+                box-shadow: none;
+                display: flex;
+                flex-direction: column;
+            }
+            
+            .chat-header {
+                padding: 15px 20px;
+                flex-shrink: 0;
+            }
+            
+            .chat-header h1 {
+                font-size: 16px;
+            }
+            
+            .tooth-icon {
+                width: 50px;
+                height: 50px;
+                font-size: 24px;
+                margin-bottom: 10px;
             }
             
             .chat-body {
-                max-height: calc(100vh - 200px);
+                flex: 1;
+                padding: 15px;
+                max-height: none;
+                display: flex;
+                flex-direction: column;
+            }
+            
+            .welcome-message {
+                font-size: 13px;
+                padding: 12px;
+                margin-bottom: 15px;
+            }
+            
+            .quick-actions {
+                margin-bottom: 15px;
+            }
+            
+            .action-btn {
+                padding: 10px 12px;
+                font-size: 13px;
             }
             
             .chat-messages {
-                max-height: calc(100vh - 350px);
+                flex: 1;
+                max-height: none;
+                margin-bottom: 10px;
+            }
+            
+            .message {
+                font-size: 13px;
+                padding: 8px 12px;
+                max-width: 85%;
+            }
+            
+            .quick-reply-buttons {
+                gap: 8px;
+                margin-top: 8px;
+            }
+            
+            .quick-reply-btn {
+                padding: 6px 12px;
+                font-size: 11px;
+            }
+            
+            .chat-input-container {
+                padding: 12px 15px;
+                flex-shrink: 0;
+            }
+            
+            .chat-input {
+                padding: 10px 12px;
+                font-size: 13px;
+            }
+            
+            .send-btn {
+                width: 40px;
+                height: 40px;
+                font-size: 16px;
+            }
+            
+            .location-modal-content {
+                width: 95%;
+                max-width: 350px;
+                padding: 20px;
+                max-height: 85vh;
+            }
+            
+            .location-modal-title {
+                font-size: 18px;
+            }
+            
+            .location-item {
+                padding: 12px;
+            }
+            
+            .location-name {
+                font-size: 14px;
+            }
+            
+            .location-address {
+                font-size: 11px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .chat-header {
+                padding: 12px 15px;
+            }
+            
+            .chat-header h1 {
+                font-size: 15px;
+            }
+            
+            .chat-body {
+                padding: 10px;
+            }
+            
+            .welcome-message {
+                font-size: 12px;
+                padding: 10px;
+            }
+            
+            .action-btn {
+                padding: 8px 10px;
+                font-size: 12px;
+            }
+            
+            .message {
+                font-size: 12px;
+                padding: 6px 10px;
+                max-width: 90%;
+            }
+            
+            .quick-reply-btn {
+                padding: 5px 10px;
+                font-size: 10px;
+            }
+            
+            .chat-input-container {
+                padding: 10px 12px;
+            }
+            
+            .chat-input {
+                padding: 8px 10px;
+                font-size: 12px;
+            }
+            
+            .send-btn {
+                width: 35px;
+                height: 35px;
+                font-size: 14px;
+            }
+        }
+
+        @media (max-height: 600px) {
+            .chat-body {
+                padding: 10px;
+            }
+            
+            .welcome-message {
+                margin-bottom: 10px;
+                padding: 8px;
+            }
+            
+            .quick-actions {
+                margin-bottom: 10px;
+            }
+            
+            .action-btn {
+                padding: 6px 8px;
+                font-size: 11px;
             }
         }
 
@@ -538,13 +730,10 @@
                         <button class="quick-reply-btn" onclick="sendQuickMessage('Sí, ya tengo tratamiento')">Sí, ya tengo tratamiento</button>
                         <button class="quick-reply-btn" onclick="sendQuickMessage('No, es mi primera vez')">No, es mi primera vez</button>
                     `;
-                } else if (message.includes('¿Qué tipo de tratamiento te interesa?')) {
+                } else if (message.includes('¿Tu cita es para una revisión general periódica o tienes algún padecimiento específico?')) {
                     quickRepliesDiv.innerHTML = `
-                        <button class="quick-reply-btn" onclick="sendQuickMessage('Limpieza dental')">Limpieza dental</button>
-                        <button class="quick-reply-btn" onclick="sendQuickMessage('Empastes')">Empastes</button>
-                        <button class="quick-reply-btn" onclick="sendQuickMessage('Ortodoncia')">Ortodoncia</button>
-                        <button class="quick-reply-btn" onclick="sendQuickMessage('Cirugía oral')">Cirugía oral</button>
-                        <button class="quick-reply-btn" onclick="sendQuickMessage('Blanqueamiento')">Blanqueamiento</button>
+                        <button class="quick-reply-btn" onclick="sendQuickMessage('Revisión general periódica')">Revisión general periódica</button>
+                        <button class="quick-reply-btn" onclick="sendQuickMessage('Tengo algún padecimiento')">Tengo algún padecimiento</button>
                     `;
                 }
                 
@@ -590,7 +779,7 @@
                 } else {
                     // Verificar si el mensaje contiene preguntas que requieren botones de respuesta rápida
                     const showQuickReplies = data.response.includes('¿Ya tienes un tratamiento abierto con nuestra clínica?') || 
-                                           data.response.includes('¿Qué tipo de tratamiento te interesa?');
+                                           data.response.includes('¿Tu cita es para una revisión general periódica o tienes algún padecimiento específico?');
                     addMessage(data.response, 'bot', showQuickReplies);
                 }
             } catch (error) {
@@ -604,6 +793,35 @@
         // Enfocar el input al cargar la página
         document.addEventListener('DOMContentLoaded', function() {
             document.getElementById('messageInput').focus();
+            
+            // Manejar el teclado virtual en móviles
+            const messageInput = document.getElementById('messageInput');
+            const chatContainer = document.querySelector('.chat-container');
+            
+            // Ajustar la vista cuando aparece el teclado virtual
+            messageInput.addEventListener('focus', function() {
+                if (window.innerWidth <= 768) {
+                    setTimeout(() => {
+                        chatContainer.scrollIntoView({ behavior: 'smooth', block: 'end' });
+                    }, 300);
+                }
+            });
+            
+            // Prevenir zoom en iOS
+            document.addEventListener('gesturestart', function(e) {
+                e.preventDefault();
+            });
+            
+            // Ajustar altura en dispositivos móviles
+            function adjustMobileHeight() {
+                if (window.innerWidth <= 768) {
+                    const vh = window.innerHeight * 0.01;
+                    document.documentElement.style.setProperty('--vh', `${vh}px`);
+                }
+            }
+            
+            adjustMobileHeight();
+            window.addEventListener('resize', adjustMobileHeight);
         });
     </script>
 </body>
