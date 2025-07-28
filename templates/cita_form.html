@@ -1,0 +1,507 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Agendar Cita - {{ config.clinic_name }}</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .form-container {
+            width: 100%;
+            max-width: 500px;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+
+        .form-header {
+            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+            padding: 30px;
+            text-align: center;
+            color: white;
+        }
+
+        .form-header h1 {
+            font-size: 24px;
+            margin-bottom: 10px;
+        }
+
+        .form-header p {
+            font-size: 16px;
+            opacity: 0.9;
+        }
+
+        .form-body {
+            padding: 30px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #333;
+        }
+
+        .form-group input,
+        .form-group select {
+            width: 100%;
+            padding: 12px 15px;
+            border: 2px solid #e9ecef;
+            border-radius: 10px;
+            font-size: 16px;
+            transition: border-color 0.3s ease;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus {
+            outline: none;
+            border-color: #4facfe;
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+        }
+
+        .submit-btn {
+            width: 100%;
+            padding: 15px;
+            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .submit-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(79, 172, 254, 0.3);
+        }
+
+        .back-btn {
+            display: inline-block;
+            margin-top: 15px;
+            padding: 10px 20px;
+            background: #6c757d;
+            color: white;
+            text-decoration: none;
+            border-radius: 8px;
+            transition: background 0.3s ease;
+        }
+
+        .back-btn:hover {
+            background: #5a6268;
+        }
+
+        .alert {
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+        }
+
+        .alert-success {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+
+        .alert-error {
+            background: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+
+        /* Estilos del calendario */
+        .calendar-container {
+            background: white;
+            border-radius: 15px;
+            padding: 20px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            margin-bottom: 20px;
+        }
+
+        .calendar-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .calendar-nav {
+            background: #4facfe;
+            color: white;
+            border: none;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            font-size: 18px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .calendar-nav:hover {
+            background: #3a8bfd;
+            transform: scale(1.1);
+        }
+
+        .calendar-header h3 {
+            font-size: 18px;
+            font-weight: 600;
+            color: #333;
+            margin: 0;
+        }
+
+        .calendar-grid {
+            width: 100%;
+        }
+
+        .calendar-weekdays {
+            display: grid;
+            grid-template-columns: repeat(6, 1fr);
+            gap: 5px;
+            margin-bottom: 10px;
+        }
+
+        .calendar-weekdays div {
+            text-align: center;
+            font-weight: 600;
+            color: #666;
+            padding: 10px 5px;
+            font-size: 14px;
+        }
+
+        .calendar-days {
+            display: grid;
+            grid-template-columns: repeat(6, 1fr);
+            gap: 5px;
+        }
+
+        .calendar-day {
+            aspect-ratio: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 2px solid #e9ecef;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 14px;
+            font-weight: 500;
+            background: white;
+            color: #333;
+        }
+
+        .calendar-day:hover {
+            border-color: #4facfe;
+            background: #f8f9fa;
+            transform: scale(1.05);
+        }
+
+        .calendar-day.selected {
+            background: #4facfe;
+            color: white;
+            border-color: #4facfe;
+        }
+
+        .calendar-day.disabled {
+            background: #f8f9fa;
+            color: #ccc;
+            cursor: not-allowed;
+            border-color: #e9ecef;
+        }
+
+        .calendar-day.today {
+            border-color: #28a745;
+            color: #28a745;
+            font-weight: 600;
+        }
+
+        .calendar-day.available {
+            border-color: #28a745;
+            color: #28a745;
+        }
+
+        @media (max-width: 768px) {
+            .form-container {
+                max-width: 100%;
+                margin: 10px;
+            }
+            
+            .form-header {
+                padding: 20px;
+            }
+            
+            .form-body {
+                padding: 20px;
+            }
+            
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+
+            .calendar-container {
+                padding: 15px;
+            }
+
+            .calendar-day {
+                font-size: 12px;
+                padding: 5px;
+            }
+
+            .calendar-weekdays div {
+                font-size: 12px;
+                padding: 8px 3px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="form-container">
+        <div class="form-header">
+            <h1>Agendar Cita</h1>
+            <p>{{ config.clinic_name }}</p>
+        </div>
+
+        <div class="form-body">
+            {% if mensaje %}
+                <div class="alert alert-{{ tipo_mensaje }}">
+                    {{ mensaje }}
+                </div>
+            {% endif %}
+
+            <form method="POST" action="{{ url_for('guardar_cita_form') }}">
+                <div class="form-group">
+                    <label for="nombre">Nombre completo *</label>
+                    <input type="text" id="nombre" name="nombre" required value="{{ datos_cita.nombre if datos_cita else '' }}">
+                </div>
+
+                <div class="form-group">
+                    <label for="telefono">Teléfono *</label>
+                    <input type="tel" id="telefono" name="telefono" required value="{{ datos_cita.telefono if datos_cita else '' }}">
+                </div>
+
+                <div class="form-group">
+                    <label for="email">Email *</label>
+                    <input type="email" id="email" name="email" required value="{{ datos_cita.email if datos_cita else '' }}">
+                </div>
+
+                <div class="form-group">
+                    <label for="tipo_cita">Tipo de cita *</label>
+                    <select id="tipo_cita" name="tipo_cita" required>
+                        <option value="">Selecciona el tipo de cita</option>
+                        <option value="revision" {% if datos_cita and datos_cita.tipo_cita == 'revision' %}selected{% endif %}>Revisión general</option>
+                        <option value="padecimiento" {% if datos_cita and datos_cita.tipo_cita == 'padecimiento' %}selected{% endif %}>Padecimiento específico</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label>Selecciona una fecha *</label>
+                    <div class="calendar-container">
+                        <div class="calendar-header">
+                            <button type="button" class="calendar-nav" onclick="cambiarMes(-1)">‹</button>
+                            <h3 id="mesActual"></h3>
+                            <button type="button" class="calendar-nav" onclick="cambiarMes(1)">›</button>
+                        </div>
+                        <div class="calendar-grid">
+                            <div class="calendar-weekdays">
+                                <div>Lun</div>
+                                <div>Mar</div>
+                                <div>Mié</div>
+                                <div>Jue</div>
+                                <div>Vie</div>
+                                <div>Sáb</div>
+                            </div>
+                            <div id="calendar-days" class="calendar-days"></div>
+                        </div>
+                    </div>
+                    <input type="hidden" id="fecha" name="fecha" required value="{{ datos_cita.fecha if datos_cita else '' }}">
+                </div>
+
+                <div class="form-group">
+                    <label for="hora">Hora *</label>
+                    <select id="hora" name="hora" required>
+                        <option value="">Selecciona una hora</option>
+                        {% for hora in horas_disponibles %}
+                            <option value="{{ hora }}" {% if datos_cita and datos_cita.hora == hora %}selected{% endif %}>{{ hora }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+                <button type="submit" class="submit-btn">
+                    Confirmar Cita
+                </button>
+            </form>
+
+            <a href="{{ url_for('index') }}" class="back-btn">
+                ← Volver al chat
+            </a>
+        </div>
+    </div>
+
+    <script>
+        let fechaActual = new Date();
+        let mesActual = fechaActual.getMonth();
+        let añoActual = fechaActual.getFullYear();
+        let fechaSeleccionada = null;
+
+        // Nombres de los meses
+        const meses = ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 
+                      'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'];
+
+        // Inicializar calendario
+        document.addEventListener('DOMContentLoaded', function() {
+            mostrarCalendario();
+            cargarHorasDisponibles();
+        });
+
+        function mostrarCalendario() {
+            const primerDia = new Date(añoActual, mesActual, 1);
+            const ultimoDia = new Date(añoActual, mesActual + 1, 0);
+            const primerDiaSemana = primerDia.getDay();
+            const diasEnMes = ultimoDia.getDate();
+            
+            // Ajustar para que Lunes sea 1 y Domingo sea 7
+            let primerDiaSemanaAjustado = primerDiaSemana;
+            if (primerDiaSemana === 0) primerDiaSemanaAjustado = 7;
+            
+            // Actualizar título del mes
+            document.getElementById('mesActual').textContent = `${meses[mesActual]} ${añoActual}`;
+            
+            // Generar días del calendario
+            const calendarDays = document.getElementById('calendar-days');
+            calendarDays.innerHTML = '';
+            
+            // Agregar espacios vacíos para alinear con los días de la semana
+            for (let i = 1; i < primerDiaSemanaAjustado; i++) {
+                const emptyDay = document.createElement('div');
+                emptyDay.className = 'calendar-day disabled';
+                calendarDays.appendChild(emptyDay);
+            }
+            
+            // Agregar días del mes
+            for (let dia = 1; dia <= diasEnMes; dia++) {
+                const dayElement = document.createElement('div');
+                dayElement.className = 'calendar-day';
+                dayElement.textContent = dia;
+                
+                const fechaCompleta = new Date(añoActual, mesActual, dia);
+                const diaSemana = fechaCompleta.getDay();
+                const esHoy = esFechaHoy(fechaCompleta);
+                const esPasado = fechaCompleta < new Date(fechaActual.getFullYear(), fechaActual.getMonth(), fechaActual.getDate());
+                const esDomingo = diaSemana === 0;
+                
+                // Aplicar clases según el estado del día
+                if (esPasado) {
+                    dayElement.classList.add('disabled');
+                } else if (esDomingo) {
+                    dayElement.classList.add('disabled');
+                } else if (esHoy) {
+                    dayElement.classList.add('today');
+                } else {
+                    dayElement.classList.add('available');
+                    
+                    // Agregar evento de clic
+                    dayElement.addEventListener('click', function() {
+                        seleccionarFecha(fechaCompleta, this);
+                    });
+                }
+                
+                calendarDays.appendChild(dayElement);
+            }
+        }
+
+        function cambiarMes(direccion) {
+            mesActual += direccion;
+            
+            if (mesActual > 11) {
+                mesActual = 0;
+                añoActual++;
+            } else if (mesActual < 0) {
+                mesActual = 11;
+                añoActual--;
+            }
+            
+            mostrarCalendario();
+        }
+
+        function seleccionarFecha(fecha, elemento) {
+            // Remover selección anterior
+            document.querySelectorAll('.calendar-day.selected').forEach(day => {
+                day.classList.remove('selected');
+            });
+            
+            // Seleccionar nueva fecha
+            elemento.classList.add('selected');
+            fechaSeleccionada = fecha;
+            
+            // Actualizar campo oculto
+            const fechaFormato = fecha.toISOString().split('T')[0];
+            document.getElementById('fecha').value = fechaFormato;
+            
+            // Cargar horas disponibles para la fecha seleccionada
+            cargarHorasDisponibles(fechaFormato);
+        }
+
+        function esFechaHoy(fecha) {
+            const hoy = new Date();
+            return fecha.getDate() === hoy.getDate() &&
+                   fecha.getMonth() === hoy.getMonth() &&
+                   fecha.getFullYear() === hoy.getFullYear();
+        }
+
+        function cargarHorasDisponibles(fecha = null) {
+            if (!fecha) return;
+            
+            fetch(`/api/horas-disponibles/${fecha}`)
+                .then(response => response.json())
+                .then(data => {
+                    const horaSelect = document.getElementById('hora');
+                    horaSelect.innerHTML = '<option value="">Selecciona una hora</option>';
+                    
+                    data.horas.forEach(hora => {
+                        const option = document.createElement('option');
+                        option.value = hora;
+                        option.textContent = hora;
+                        horaSelect.appendChild(option);
+                    });
+                })
+                .catch(error => {
+                    console.error('Error al cargar horas:', error);
+                });
+        }
+
+        // Validar formulario antes de enviar
+        document.querySelector('form').addEventListener('submit', function(e) {
+            if (!fechaSeleccionada) {
+                e.preventDefault();
+                alert('Por favor selecciona una fecha');
+                return false;
+            }
+        });
+    </script>
+</body>
+</html> 

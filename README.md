@@ -1,10 +1,10 @@
 # Chatbot Clínica Dental
 
-Un chatbot inteligente para clínicas dentales construido con Flask y OpenAI, optimizado para dispositivos móviles.
+Un chatbot inteligente para clínicas dentales construido con Flask, con respuestas predefinidas optimizado para dispositivos móviles.
 
 ## Características
 
-- 🤖 Chatbot inteligente conectado a OpenAI GPT-3.5
+- 🤖 Chatbot con respuestas predefinidas (sin dependencias externas)
 - 📱 Diseño completamente optimizado para móviles
 - 🎨 Interfaz moderna y atractiva
 - ⚡ Botones de acción rápida para consultas comunes
@@ -44,7 +44,7 @@ source venv/bin/activate
 pip install -r requirements.txt
 ```
 
-### 5. Configurar variables de entorno
+### 5. Configurar variables de entorno (Opcional)
 
 Crea un archivo `.env` en la raíz del proyecto:
 ```bash
@@ -52,9 +52,9 @@ Crea un archivo `.env` en la raíz del proyecto:
 cp env_example.txt .env
 ```
 
-Edita el archivo `.env` y agrega tu API key de OpenAI:
+Edita el archivo `.env` si deseas personalizar la configuración:
 ```
-OPENAI_API_KEY=tu_api_key_real_de_openai
+SECRET_KEY=tu-clave-secreta-aqui
 ```
 
 ## Uso
@@ -79,16 +79,16 @@ El proyecto incluye un archivo `render.yaml` que automatiza la configuración:
 3. **Crea un nuevo Web Service**
 4. **Conecta tu repositorio de GitHub**
 5. **Render detectará automáticamente el archivo `render.yaml`**
-6. **Configura la variable de entorno:**
-   - `OPENAI_API_KEY`: Tu API key de OpenAI
+6. **Configura la variable de entorno (opcional):**
+   - `SECRET_KEY`: Tu clave secreta personalizada
 
 ### Opción 2: Configuración manual
 Si prefieres configurar manualmente:
 
 1. **Crear una nueva Web Service**
 2. **Conectar tu repositorio de GitHub**
-3. **Configurar las variables de entorno:**
-   - `OPENAI_API_KEY`: Tu API key de OpenAI
+3. **Configurar las variables de entorno (opcional):**
+   - `SECRET_KEY`: Tu clave secreta personalizada
    - `PYTHON_VERSION`: 3.9.16
 
 4. **Configurar el comando de build:**
@@ -102,7 +102,6 @@ Si prefieres configurar manualmente:
    ```
 
 ### Variables de entorno requeridas
-- `OPENAI_API_KEY`: Tu clave API de OpenAI (obligatoria)
 - `SECRET_KEY`: Clave secreta para sesiones (opcional, se genera automáticamente)
 
 ## Estructura del Proyecto
@@ -151,7 +150,7 @@ clinicschat/
 - Botones de acción rápida para consultas comunes
 
 ### Seguridad
-- API key de OpenAI configurada como variable de entorno
+- Respuestas predefinidas sin dependencias externas
 - Validación de entrada del usuario
 - Manejo de errores robusto
 
@@ -167,8 +166,8 @@ CHATBOT_CONFIG = {
 }
 ```
 
-### Modificar el prompt del sistema
-Edita la variable `system_prompt` en `app.py` para personalizar las respuestas del chatbot.
+### Modificar las respuestas del chatbot
+Edita el diccionario `RESPUESTAS_PREDEFINIDAS` en `app.py` para personalizar las respuestas del chatbot.
 
 ### Cambiar colores y estilos
 Modifica el CSS en `templates/index.html` para personalizar la apariencia.
@@ -216,16 +215,16 @@ Ve a `http://localhost:5000/panel` para acceder al panel de atención al cliente
 
 ## Troubleshooting
 
-### Error: "No module named 'openai'"
+### Error: "No module named 'flask'"
 ```bash
-pip install openai
+pip install -r requirements.txt
 ```
 
-### Error: "OPENAI_API_KEY not found"
-Asegúrate de que el archivo `.env` existe y contiene tu API key de OpenAI.
+### Error: "Database not found"
+La base de datos se crea automáticamente al ejecutar la aplicación por primera vez.
 
-### Error de conexión con OpenAI
-Verifica que tu API key sea válida y tengas créditos disponibles en tu cuenta de OpenAI.
+### Error de conexión
+Verifica que el servidor esté ejecutándose en `http://localhost:5000`
 
 ## Licencia
 

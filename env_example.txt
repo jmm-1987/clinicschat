@@ -1,5 +1,5 @@
-# Configuración de OpenAI
-OPENAI_API_KEY=tu_api_key_de_openai_aqui
+# Configuración del chatbot (ya no requiere OpenAI)
+# SECRET_KEY=tu-clave-secreta-aqui
 
 # Configuración del servidor Flask
 FLASK_ENV=development

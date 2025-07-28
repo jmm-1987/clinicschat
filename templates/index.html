@@ -31,6 +31,55 @@
             position: relative;
         }
 
+        /* Responsive para móviles */
+        @media (max-width: 768px) {
+            body {
+                padding: 0;
+                margin: 0;
+                height: 100vh;
+                overflow: hidden;
+            }
+            
+            .chat-container {
+                max-width: 100%;
+                width: 100%;
+                height: 100vh;
+                border-radius: 0;
+                box-shadow: none;
+                display: flex;
+                flex-direction: column;
+            }
+            
+            .chat-header {
+                flex-shrink: 0;
+                padding: 15px 20px;
+            }
+            
+            .chat-body {
+                flex: 1;
+                padding: 15px;
+                max-height: none;
+                display: flex;
+                flex-direction: column;
+                overflow: hidden;
+            }
+            
+            .chat-messages {
+                flex: 1;
+                max-height: none;
+                overflow-y: auto;
+                margin-bottom: 10px;
+            }
+            
+            .welcome-message {
+                margin-bottom: 15px;
+            }
+            
+            .quick-actions {
+                margin-bottom: 15px;
+            }
+        }
+
         .chat-header {
             background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
             padding: 20px;
@@ -43,6 +92,33 @@
             font-size: 18px;
             font-weight: 600;
             margin-bottom: 10px;
+        }
+
+        .back-button-header {
+            position: absolute;
+            top: 15px;
+            left: 15px;
+            background: rgba(255,255,255,0.2);
+            border: none;
+            color: white;
+            padding: 8px 12px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 13px;
+            font-weight: 600;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+        }
+
+        .back-button-header:hover {
+            background: rgba(255,255,255,0.3);
+            transform: scale(1.05);
+        }
+
+        .back-button-header.show {
+            display: flex;
         }
 
         .close-btn {
@@ -75,9 +151,12 @@
         }
 
         .chat-body {
-            padding: 20px;
-            max-height: 400px;
+            padding: 15px 20px;
+            max-height: calc(100vh - 120px);
             overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            min-height: 0;
         }
 
         .welcome-message {
@@ -213,28 +292,32 @@
         }
 
         .quick-reply-buttons {
-            display: flex;
-            gap: 10px;
-            margin-top: 10px;
+            display: flex !important;
             flex-wrap: wrap;
+            gap: 10px;
+            margin-top: 15px;
+            justify-content: flex-start;
+            width: 100%;
+            z-index: 10;
         }
 
         .quick-reply-btn {
-            padding: 8px 15px;
-            border: 2px solid #4facfe;
+            background: #f1f1f1;
+            color: #333;
+            border: 1px solid #e0e0e0;
             border-radius: 20px;
-            background: white;
-            color: #4facfe;
-            font-size: 12px;
+            padding: 8px 18px;
+            font-size: 14px;
             cursor: pointer;
-            transition: all 0.3s ease;
-            text-decoration: none;
-            display: inline-block;
+            margin-bottom: 5px;
+            transition: background 0.2s, color 0.2s;
+            outline: none;
         }
 
-        .quick-reply-btn:hover {
+        .quick-reply-btn:hover, .quick-reply-btn:focus {
             background: #4facfe;
             color: white;
+            border-color: #4facfe;
         }
 
         .bot-message {
@@ -245,9 +328,10 @@
         }
 
         .chat-messages {
-            max-height: 200px;
+            flex: 1;
             overflow-y: auto;
-            margin-bottom: 15px;
+            margin-bottom: 10px;
+            min-height: 0;
         }
 
         .message {
@@ -277,6 +361,99 @@
             padding: 15px 20px;
             background: #f8f9fa;
             border-top: 1px solid #e9ecef;
+        }
+
+        .chat-input-container.hidden {
+            display: none;
+        }
+
+        /* Estilos para el formulario de datos personales */
+        .form-container {
+            background: white;
+            border-radius: 15px;
+            padding: 20px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: 600;
+            color: #333;
+            font-size: 14px;
+        }
+
+        .form-input {
+            width: 100%;
+            padding: 12px 15px;
+            border: 2px solid #e9ecef;
+            border-radius: 8px;
+            font-size: 14px;
+            outline: none;
+            transition: border-color 0.3s ease;
+            box-sizing: border-box;
+        }
+
+        .form-input:focus {
+            border-color: #4facfe;
+        }
+
+        .form-actions {
+            display: flex;
+            gap: 10px;
+            margin-top: 20px;
+        }
+
+        .btn-primary {
+            background: #4facfe;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            flex: 1;
+        }
+
+        .btn-primary:hover {
+            background: #3a8bfd;
+            transform: translateY(-2px);
+        }
+
+        .btn-secondary {
+            background: #6c757d;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            flex: 1;
+        }
+
+        .btn-secondary:hover {
+            background: #5a6268;
+            transform: translateY(-2px);
+        }
+
+        /* Estilos para el resumen de la cita */
+        .resumen-item {
+            margin-bottom: 10px;
+            padding: 8px 0;
+            border-bottom: 1px solid #f0f0f0;
+        }
+
+        .resumen-item:last-of-type {
+            border-bottom: none;
+            margin-bottom: 0;
         }
 
         .chat-input {
@@ -337,6 +514,145 @@
         /* Estilos para el calendario */
         .calendar-container {
             margin-top: 10px;
+            background: white;
+            border-radius: 15px;
+            padding: 15px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+
+        .calendar-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .calendar-nav {
+            background: #4facfe;
+            color: white;
+            border: none;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            font-size: 14px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .calendar-nav:hover {
+            background: #3a8bfd;
+            transform: scale(1.1);
+        }
+
+        .calendar-header h3 {
+            font-size: 14px;
+            font-weight: 600;
+            color: #333;
+            margin: 0;
+        }
+
+        .calendar-grid {
+            width: 100%;
+        }
+
+        .calendar-weekdays {
+            display: grid;
+            grid-template-columns: repeat(6, 1fr);
+            gap: 3px;
+            margin-bottom: 8px;
+        }
+
+        .calendar-weekdays div {
+            text-align: center;
+            font-weight: 600;
+            color: #666;
+            padding: 5px 3px;
+            font-size: 11px;
+        }
+
+        .calendar-days {
+            display: grid;
+            grid-template-columns: repeat(6, 1fr);
+            gap: 3px;
+        }
+
+        .calendar-day {
+            aspect-ratio: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 2px solid #e9ecef;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 11px;
+            font-weight: 500;
+            background: white;
+            color: #333;
+            min-height: 25px;
+        }
+
+        .calendar-day:hover {
+            border-color: #4facfe;
+            background: #f8f9fa;
+            transform: scale(1.05);
+        }
+
+        .calendar-day.selected {
+            background: #4facfe;
+            color: white;
+            border-color: #4facfe;
+        }
+
+        .calendar-day.disabled {
+            background: #f8f9fa;
+            color: #ccc;
+            cursor: not-allowed;
+            border-color: #e9ecef;
+        }
+
+        .calendar-day.today {
+            border-color: #28a745;
+            color: #28a745;
+            font-weight: 600;
+        }
+
+        .calendar-day.available {
+            border-color: #28a745;
+            color: #28a745;
+        }
+
+        /* Estilos para las horas */
+        .hours-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(60px, 1fr));
+            gap: 6px;
+            margin-top: 10px;
+        }
+
+        .hour-btn {
+            padding: 8px 6px;
+            border: 2px solid #e9ecef;
+            border-radius: 8px;
+            background: white;
+            color: #333;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 11px;
+            text-align: center;
+            font-weight: 500;
+        }
+
+        .hour-btn:hover {
+            border-color: #4facfe;
+            background: #f8f9fa;
+            transform: scale(1.05);
+        }
+
+        .hour-btn.selected {
+            background: #4facfe;
+            color: white;
+            border-color: #4facfe;
         }
 
         .month-calendar {
@@ -458,6 +774,8 @@
             border-color: #4facfe;
         }
 
+
+
         /* Responsive para calendario */
         @media (max-width: 768px) {
             .month-calendar {
@@ -475,165 +793,6 @@
             
             .calendar-day.empty {
                 min-height: 35px;
-            }
-        }
-
-        @media (max-width: 480px) {
-            .calendar-day {
-                font-size: 10px;
-                min-height: 30px;
-                padding: 2px;
-            }
-            
-            .calendar-day.empty {
-                min-height: 30px;
-            }
-            
-            .day-number {
-                font-size: 12px;
-            }
-            
-            .day-name {
-                font-size: 9px;
-            }
-            
-            .hour-btn {
-                padding: 8px 6px;
-                font-size: 11px;
-            }
-            
-            .hours-grid {
-                grid-template-columns: repeat(auto-fill, minmax(60px, 1fr));
-                gap: 6px;
-            }
-        }
-
-        .send-btn:disabled {
-            background: #ccc;
-            cursor: not-allowed;
-        }
-
-        .typing-indicator {
-            display: none;
-            padding: 10px 15px;
-            color: #666;
-            font-style: italic;
-        }
-
-        @media (max-width: 768px) {
-            body {
-                padding: 0;
-                background: white;
-            }
-            
-            .chat-container {
-                max-width: 100%;
-                width: 100%;
-                height: calc(var(--vh, 1vh) * 100);
-                border-radius: 0;
-                box-shadow: none;
-                display: flex;
-                flex-direction: column;
-            }
-            
-            .chat-header {
-                padding: 15px 20px;
-                flex-shrink: 0;
-            }
-            
-            .chat-header h1 {
-                font-size: 16px;
-            }
-            
-            .tooth-icon {
-                width: 50px;
-                height: 50px;
-                font-size: 24px;
-                margin-bottom: 10px;
-            }
-            
-            .chat-body {
-                flex: 1;
-                padding: 15px;
-                max-height: none;
-                display: flex;
-                flex-direction: column;
-            }
-            
-            .welcome-message {
-                font-size: 13px;
-                padding: 12px;
-                margin-bottom: 15px;
-            }
-            
-            .quick-actions {
-                margin-bottom: 15px;
-            }
-            
-            .action-btn {
-                padding: 10px 12px;
-                font-size: 13px;
-            }
-            
-            .chat-messages {
-                flex: 1;
-                max-height: none;
-                margin-bottom: 10px;
-            }
-            
-            .message {
-                font-size: 13px;
-                padding: 8px 12px;
-                max-width: 85%;
-            }
-            
-            .quick-reply-buttons {
-                gap: 8px;
-                margin-top: 8px;
-            }
-            
-            .quick-reply-btn {
-                padding: 6px 12px;
-                font-size: 11px;
-            }
-            
-            .chat-input-container {
-                padding: 12px 15px;
-                flex-shrink: 0;
-            }
-            
-            .chat-input {
-                padding: 10px 12px;
-                font-size: 13px;
-            }
-            
-            .send-btn {
-                width: 40px;
-                height: 40px;
-                font-size: 16px;
-            }
-            
-            .location-modal-content {
-                width: 95%;
-                max-width: 350px;
-                padding: 20px;
-                max-height: 85vh;
-            }
-            
-            .location-modal-title {
-                font-size: 18px;
-            }
-            
-            .location-item {
-                padding: 12px;
-            }
-            
-            .location-name {
-                font-size: 14px;
-            }
-            
-            .location-address {
-                font-size: 11px;
             }
         }
 
@@ -741,13 +900,16 @@
 <body>
     <div class="chat-container">
         <div class="chat-header">
-            <button class="close-btn" onclick="closeChat()">
-                <i class="fas fa-times"></i>
+            <button id="backButton" class="back-button-header" onclick="volverAlInicio()">
+                ← Volver
             </button>
             <div class="tooth-icon">
                 <i class="fas fa-tooth" style="color: #4facfe;"></i>
             </div>
             <h1>{{ config.clinic_name }}</h1>
+            <button class="close-btn" onclick="closeChat()">
+                <i class="fas fa-times"></i>
+            </button>
         </div>
 
         <div class="chat-body">
@@ -755,7 +917,7 @@
                 {{ config.welcome_message }}
             </div>
 
-            <div class="quick-actions">
+            <div class="quick-actions" id="quickActions">
                 <button class="action-btn" onclick="sendQuickMessage('Información sobre tratamientos')">
                     <i class="fas fa-tooth" style="color: #666;"></i>
                     Información sobre tratamientos
@@ -781,12 +943,15 @@
             </div>
         </div>
 
-        <div class="chat-input-container">
+
+
+        <!-- Eliminar o comentar el input general -->
+        <!-- <div class="chat-input-container">
             <input type="text" class="chat-input" id="messageInput" placeholder="Escribe un mensaje..." onkeypress="handleKeyPress(event)">
             <button class="send-btn" onclick="sendMessage()" id="sendBtn">
                 <i class="fas fa-paper-plane"></i>
             </button>
-        </div>
+        </div> -->
     </div>
 
     <!-- Modal de Ubicaciones -->
@@ -848,6 +1013,10 @@
         }
 
         function showLocations() {
+            // Limpiar el chat y activar botón volver
+            limpiarChat();
+            activarBotonVolver();
+            
             const modal = document.getElementById('locationModal');
             modal.style.display = 'flex';
         }
@@ -866,6 +1035,14 @@
         });
 
         function sendQuickMessage(message) {
+            // Limpiar el chat y activar botón volver si es una opción del menú principal
+            if (message === 'Información sobre tratamientos' || 
+                message === 'Solicitar una cita' || 
+                message === 'Ver ubicaciones') {
+                limpiarChat();
+                activarBotonVolver();
+            }
+            
             addMessage(message, 'user');
             sendToAPI(message);
         }
@@ -875,6 +1052,14 @@
             const message = input.value.trim();
             
             if (message) {
+                // Limpiar el chat y activar botón volver si es una opción del menú principal
+                if (message === 'Información sobre tratamientos' || 
+                    message === 'Solicitar una cita' || 
+                    message === 'Ver ubicaciones') {
+                    limpiarChat();
+                    activarBotonVolver();
+                }
+                
                 addMessage(message, 'user');
                 input.value = '';
                 sendToAPI(message);
@@ -887,7 +1072,7 @@
             }
         }
 
-        function addMessage(message, sender, showQuickReplies = false) {
+        function addMessage(message, sender, showQuickReplies = false, showFormButton = false, showCalendar = false, showHours = false, showConfirmation = false, showInputPadecimiento = false) {
             const chatMessages = document.getElementById('chatMessages');
             const messageDiv = document.createElement('div');
             messageDiv.className = `message ${sender}-message`;
@@ -904,7 +1089,7 @@
                         <button class="quick-reply-btn" onclick="sendQuickMessage('Sí, ya tengo tratamiento')">Sí, ya tengo tratamiento</button>
                         <button class="quick-reply-btn" onclick="sendQuickMessage('No, es mi primera vez')">No, es mi primera vez</button>
                     `;
-                } else if (message.includes('¿Tu cita es para una revisión general periódica o tienes algún padecimiento específico?')) {
+                } else if (message.includes('¿Tu cita es para una revisión general periódica o tienes algún padecimiento específico que te gustaría consultar?')) {
                     quickRepliesDiv.innerHTML = `
                         <button class="quick-reply-btn" onclick="sendQuickMessage('Revisión general periódica')">Revisión general periódica</button>
                         <button class="quick-reply-btn" onclick="sendQuickMessage('Tengo algún padecimiento')">Tengo algún padecimiento</button>
@@ -925,9 +1110,57 @@
                         <button class="quick-reply-btn" onclick="sendQuickMessage('Sí, quiero agendar una cita')">Sí, quiero agendar una cita</button>
                         <button class="quick-reply-btn" onclick="sendQuickMessage('No, gracias')">No, gracias</button>
                     `;
+                } else if (message.includes('¿Sobre qué tratamiento específico te gustaría saber más?')) {
+                    quickRepliesDiv.innerHTML = `
+                        <button class="quick-reply-btn" onclick="sendQuickMessage('Limpieza dental')">Limpieza dental</button>
+                        <button class="quick-reply-btn" onclick="sendQuickMessage('Empastes')">Empastes</button>
+                        <button class="quick-reply-btn" onclick="sendQuickMessage('Ortodoncia')">Ortodoncia</button>
+                        <button class="quick-reply-btn" onclick="sendQuickMessage('Cirugía oral')">Cirugía oral</button>
+                        <button class="quick-reply-btn" onclick="sendQuickMessage('Blanqueamiento')">Blanqueamiento</button>
+                        <button class="quick-reply-btn" onclick="sendQuickMessage('Endodoncia')">Endodoncia</button>
+                        <button class="quick-reply-btn" onclick="sendQuickMessage('Periodoncia')">Periodoncia</button>
+                        <button class="quick-reply-btn" onclick="sendQuickMessage('Implantes dentales')">Implantes dentales</button>
+                    `;
                 }
                 
                 messageDiv.appendChild(quickRepliesDiv);
+            }
+            
+            // Mostrar input de padecimiento si corresponde
+            if (showInputPadecimiento && sender === 'bot') {
+                console.log('Mostrando input de padecimiento');
+                setTimeout(() => {
+                    mostrarInputPadecimiento();
+                }, 300);
+            }
+            
+            // Agregar calendario si es necesario
+            if (showCalendar && sender === 'bot') {
+                setTimeout(() => {
+                    mostrarCalendarioEnChat();
+                }, 500);
+            }
+            
+            // Agregar selector de horas si es necesario
+            if (showHours && sender === 'bot') {
+                setTimeout(() => {
+                    mostrarHorasEnChat();
+                }, 500);
+            }
+            
+            // Agregar botones de confirmación si es necesario
+            if (showConfirmation && sender === 'bot') {
+                const confirmationDiv = document.createElement('div');
+                confirmationDiv.className = 'quick-reply-buttons';
+                confirmationDiv.innerHTML = `
+                    <button class="quick-reply-btn" onclick="confirmarCita()" style="background: #28a745; color: white; border-color: #28a745;">
+                        ✅ Sí, confirmar cita
+                    </button>
+                    <button class="quick-reply-btn" onclick="cancelarCita()" style="background: #dc3545; color: white; border-color: #dc3545;">
+                        ❌ Cancelar
+                    </button>
+                `;
+                messageDiv.appendChild(confirmationDiv);
             }
             
             chatMessages.appendChild(messageDiv);
@@ -964,7 +1197,11 @@
                     headers: {
                         'Content-Type': 'application/json',
                     },
-                    body: JSON.stringify({ message: message })
+                    body: JSON.stringify({ 
+                        message: message,
+                        estado: estadoConversacion,
+                        datos_cita: datosCita
+                    })
                 });
 
                 const data = await response.json();
@@ -974,39 +1211,45 @@
                 if (data.error) {
                     addMessage('Lo siento, ha ocurrido un error. Por favor, inténtalo de nuevo.', 'bot');
                 } else {
+                    // Actualizar estado de la conversación
+                    if (data.estado) {
+                        estadoConversacion = data.estado;
+                        console.log('Estado actualizado:', estadoConversacion);
+                    }
+                    
+                    // Actualizar datos de la cita
+                    if (data.datos_cita) {
+                        datosCita = { ...datosCita, ...data.datos_cita };
+                        console.log('Datos de cita actualizados:', datosCita);
+                    }
+                    
                     // Verificar si el mensaje contiene preguntas que requieren botones de respuesta rápida
                     const showQuickReplies = data.response.includes('¿Ya tienes un tratamiento abierto con nuestra clínica?') || 
-                                           data.response.includes('¿Tu cita es para una revisión general periódica o tienes algún padecimiento específico?') ||
-                                           data.response.includes('¿Sobre qué tratamiento específico te gustaría saber más?') ||
-                                           data.response.includes('¿Te gustaría agendar una cita para que un especialista pueda revisar tu caso personalmente?');
-                    addMessage(data.response, 'bot', showQuickReplies);
+                       data.response.includes('¿Tu cita es para una revisión general periódica o tienes algún padecimiento específico que te gustaría consultar?') ||
+                       data.response.includes('¿Sobre qué tratamiento específico te gustaría saber más?') ||
+                       data.response.includes('¿Te gustaría agendar una cita para que un especialista pueda revisar tu caso personalmente?');
+                    
+                    // Verificar qué elementos mostrar
+                    const showCalendar = data.mostrar_calendario;
+                    const showHours = data.mostrar_horas;
+                    const showConfirmation = data.mostrar_confirmacion;
+                    const limpiarPantalla = data.limpiar_pantalla;
+                    const showInputPadecimiento = data.mostrar_input_padecimiento;
+                    
+                    console.log('Backend response:', data);
+                    console.log('showInputPadecimiento:', showInputPadecimiento);
+                    
+                    // Si se debe limpiar la pantalla, hacerlo antes de agregar el mensaje
+                    if (limpiarPantalla) {
+                        document.getElementById('chatMessages').innerHTML = '';
+                    }
+                    
+                    addMessage(data.response, 'bot', showQuickReplies, false, showCalendar, showHours, showConfirmation, showInputPadecimiento);
                     
                     // Debug: mostrar la respuesta del chatbot
                     console.log('Respuesta del chatbot:', data.response);
                     
-                    // Verificar si el mensaje menciona selección de fecha
-                    if (data.response.includes('seleccionar la fecha de tu cita') || data.response.includes('¿Qué día te viene mejor?')) {
-                        setTimeout(() => {
-                            mostrarCalendario();
-                        }, 1000);
-                    }
-                    
-                    // Verificar si inicia el flujo de citas
-                    if (data.response.includes('seleccionar la fecha y hora') || data.response.includes('fecha y hora que te venga mejor')) {
-                        console.log('Iniciando flujo de citas');
-                        pasoCita = 1;
-                        // Determinar tipo de cita basado en el contexto
-                        if (data.response.includes('revisión general')) {
-                            datosCita.tipo_cita = 'revision';
-                            console.log('Tipo de cita: revision');
-                        } else {
-                            datosCita.tipo_cita = 'padecimiento';
-                            console.log('Tipo de cita: padecimiento');
-                        }
-                        setTimeout(() => {
-                            mostrarCalendario();
-                        }, 1000);
-                    }
+
                 }
             } catch (error) {
                 hideTypingIndicator();
@@ -1054,6 +1297,7 @@
             fecha: '',
             hora: ''
         };
+        let estadoConversacion = 'inicial';
         let pasoCita = 0; // 0: no iniciado, 1: fecha/hora, 2: nombre, 3: telefono, 4: email
 
         // Enfocar el input al cargar la página
@@ -1090,169 +1334,275 @@
             window.addEventListener('resize', adjustMobileHeight);
         });
 
-        // Función para mostrar el calendario
-        function mostrarCalendario() {
-            fetch('/api/dias-disponibles')
-                .then(response => response.json())
-                .then(data => {
-                    const chatMessages = document.getElementById('chatMessages');
-                    const calendarDiv = document.createElement('div');
-                    calendarDiv.className = 'message bot-message';
-                    calendarDiv.innerHTML = `
-                        <div style="margin-bottom: 10px;">Selecciona una fecha disponible:</div>
-                        <div class="calendar-grid">
-                            ${generarCalendario(data.dias)}
-                        </div>
-                    `;
-                    chatMessages.appendChild(calendarDiv);
-                    chatMessages.scrollTop = chatMessages.scrollHeight;
-                })
-                .catch(error => {
-                    console.error('Error al cargar el calendario:', error);
-                });
-        }
 
-        // Función para generar el calendario
-        function generarCalendario(dias) {
-            const meses = ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 
-                          'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'];
-            const diasSemana = ['Lun', 'Mar', 'Mié', 'Jue', 'Vie', 'Sáb'];
-            
-            let html = '<div class="calendar-container">';
-            
-            // Agrupar días por mes
-            const diasPorMes = {};
-            dias.forEach(dia => {
-                const fecha = new Date(dia.fecha);
-                const mesKey = `${fecha.getFullYear()}-${fecha.getMonth()}`;
-                if (!diasPorMes[mesKey]) {
-                    diasPorMes[mesKey] = [];
-                }
-                diasPorMes[mesKey].push(dia);
-            });
-            
-            // Generar calendario para cada mes
-            Object.keys(diasPorMes).forEach(mesKey => {
-                const diasMes = diasPorMes[mesKey];
-                const primerDia = new Date(diasMes[0].fecha);
-                const nombreMes = meses[primerDia.getMonth()];
-                const año = primerDia.getFullYear();
-                
-                html += `
-                    <div class="month-calendar">
-                        <div class="month-title">${nombreMes} ${año}</div>
-                        <div class="calendar-header">
-                            ${diasSemana.map(dia => `<div class="calendar-day-header">${dia}</div>`).join('')}
-                        </div>
-                        <div class="calendar-days">
-                            ${generarDiasMes(diasMes)}
-                        </div>
+
+
+
+
+
+        // Función para mostrar calendario en el chat
+        function mostrarCalendarioEnChat() {
+            const chatMessages = document.getElementById('chatMessages');
+            const calendarDiv = document.createElement('div');
+            calendarDiv.className = 'message bot-message';
+            calendarDiv.innerHTML = `
+                <div style="margin-bottom: 10px;">Selecciona una fecha disponible:</div>
+                <div class="calendar-container" style="max-width: 300px; margin: 0 auto;">
+                    <div class="calendar-header">
+                        <button type="button" class="calendar-nav" onclick="cambiarMesChat(-1)">‹</button>
+                        <h3 id="mesActualChat"></h3>
+                        <button type="button" class="calendar-nav" onclick="cambiarMesChat(1)">›</button>
                     </div>
-                `;
-            });
+                    <div class="calendar-grid">
+                        <div class="calendar-weekdays">
+                            <div>Lun</div>
+                            <div>Mar</div>
+                            <div>Mié</div>
+                            <div>Jue</div>
+                            <div>Vie</div>
+                            <div>Sáb</div>
+                        </div>
+                        <div id="calendar-days-chat" class="calendar-days"></div>
+                    </div>
+                </div>
+            `;
+            chatMessages.appendChild(calendarDiv);
+            chatMessages.scrollTop = chatMessages.scrollHeight;
             
-            html += '</div>';
-            return html;
-        }
-
-        // Función para generar los días de un mes
-        function generarDiasMes(diasMes) {
-            let html = '';
-            const primerDia = new Date(diasMes[0].fecha);
-            // Ajustar para que Lunes sea 1 y Domingo sea 7
-            let primerDiaSemana = primerDia.getDay();
-            if (primerDiaSemana === 0) primerDiaSemana = 7; // Domingo = 7
-            
-            // Agregar espacios vacíos para alinear con los días de la semana
-            for (let i = 1; i < primerDiaSemana; i++) {
-                html += '<div class="calendar-day empty"></div>';
+            // Ocultar el input cuando se muestra el calendario (si existe)
+            const inputContainer = document.querySelector('.chat-input-container');
+            if (inputContainer) {
+                inputContainer.classList.add('hidden');
             }
             
-            // Agregar los días del mes
-            diasMes.forEach(dia => {
-                const fecha = new Date(dia.fecha);
-                const diaSemana = dia.dia_semana;
-                html += `
-                    <div class="calendar-day available" onclick="seleccionarFecha('${dia.fecha}', this)">
-                        <div class="day-number">${fecha.getDate()}</div>
-                        <div class="day-name">${diaSemana}</div>
-                    </div>
-                `;
-            });
-            
-            return html;
-        }
-
-
-
-        // Función para seleccionar fecha
-        function seleccionarFecha(fecha, element) {
-            // Remover selección anterior
-            document.querySelectorAll('.calendar-day.selected').forEach(day => {
-                day.classList.remove('selected');
-            });
-            
-            // Seleccionar nueva fecha
-            element.classList.add('selected');
-            datosCita.fecha = fecha;
-            
-            // Mostrar horas disponibles
+            // Reinicializar variables del calendario y mostrar con un pequeño delay
+            reinicializarCalendario();
             setTimeout(() => {
-                mostrarHorasDisponibles(fecha);
-            }, 500);
+                mostrarCalendarioChat();
+            }, 100);
         }
 
-        // Función para mostrar horas disponibles
-        function mostrarHorasDisponibles(fecha) {
-            fetch(`/api/horas-disponibles/${fecha}`)
+        // Función para mostrar horas en el chat
+        function mostrarHorasEnChat() {
+            if (!datosCita.fecha) return;
+            
+            fetch(`/api/horas-disponibles/${datosCita.fecha}`)
                 .then(response => response.json())
                 .then(data => {
                     const chatMessages = document.getElementById('chatMessages');
-                    const horasDiv = document.createElement('div');
-                    horasDiv.className = 'message bot-message';
-                    horasDiv.innerHTML = `
+                    const hoursDiv = document.createElement('div');
+                    hoursDiv.className = 'message bot-message';
+                    hoursDiv.innerHTML = `
                         <div style="margin-bottom: 10px;">Selecciona una hora disponible:</div>
-                        <div class="hours-grid">
+                        <div class="hours-grid" style="max-width: 300px; margin: 0 auto;">
                             ${data.horas.map(hora => `
-                                <button class="hour-btn" onclick="seleccionarHora('${hora}', this)">${hora}</button>
+                                <button class="hour-btn" onclick="seleccionarHoraChat('${hora}')">${hora}</button>
                             `).join('')}
                         </div>
                     `;
-                    chatMessages.appendChild(horasDiv);
+                    chatMessages.appendChild(hoursDiv);
                     chatMessages.scrollTop = chatMessages.scrollHeight;
+                    
+                    // Mostrar el input cuando se muestran las horas (si existe)
+                    const inputContainer = document.querySelector('.chat-input-container');
+                    if (inputContainer) {
+                        inputContainer.classList.remove('hidden');
+                    }
                 })
                 .catch(error => {
                     console.error('Error al cargar las horas:', error);
                 });
         }
 
-        // Función para seleccionar hora
-        function seleccionarHora(hora, element) {
+        // Variables para el calendario del chat - Inicializar al cargar la página
+        let fechaActualChat = new Date();
+        let mesActualChat = fechaActualChat.getMonth();
+        let añoActualChat = fechaActualChat.getFullYear();
+
+        // Nombres de los meses
+        const mesesChat = ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 
+                          'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'];
+
+        // Función para reinicializar las variables del calendario
+        function reinicializarCalendario() {
+            fechaActualChat = new Date();
+            mesActualChat = fechaActualChat.getMonth();
+            añoActualChat = fechaActualChat.getFullYear();
+            console.log('Calendario reinicializado:', mesActualChat, añoActualChat);
+        }
+
+        function mostrarCalendarioChat() {
+            console.log('Inicializando calendario...');
+            console.log('Mes actual:', mesActualChat, 'Año actual:', añoActualChat);
+            
+            // Verificar que las variables estén correctamente inicializadas
+            if (mesActualChat === undefined || añoActualChat === undefined) {
+                console.error('Variables del calendario no inicializadas, reinicializando...');
+                reinicializarCalendario();
+            }
+            
+            const primerDia = new Date(añoActualChat, mesActualChat, 1);
+            const ultimoDia = new Date(añoActualChat, mesActualChat + 1, 0);
+            const primerDiaSemana = primerDia.getDay();
+            const diasEnMes = ultimoDia.getDate();
+            
+            console.log('Primer día del mes:', primerDia);
+            console.log('Último día del mes:', ultimoDia);
+            console.log('Días en el mes:', diasEnMes);
+            console.log('Primer día de la semana:', primerDiaSemana);
+            
+            // Ajustar para que Lunes sea 1 y Domingo sea 7
+            let primerDiaSemanaAjustado = primerDiaSemana;
+            if (primerDiaSemana === 0) primerDiaSemanaAjustado = 7;
+            
+            console.log('Primer día ajustado:', primerDiaSemanaAjustado);
+            
+            // Actualizar título del mes
+            const mesActualElement = document.getElementById('mesActualChat');
+            if (mesActualElement) {
+                mesActualElement.textContent = `${mesesChat[mesActualChat]} ${añoActualChat}`;
+                console.log('Título actualizado:', mesActualElement.textContent);
+            } else {
+                console.error('No se encontró el elemento mesActualChat');
+            }
+            
+            // Generar días del calendario
+            const calendarDays = document.getElementById('calendar-days-chat');
+            if (calendarDays) {
+                calendarDays.innerHTML = '';
+                console.log('Limpiando calendario...');
+                
+                // Agregar espacios vacíos para alinear con los días de la semana
+                for (let i = 1; i < primerDiaSemanaAjustado; i++) {
+                    const emptyDay = document.createElement('div');
+                    emptyDay.className = 'calendar-day disabled';
+                    calendarDays.appendChild(emptyDay);
+                }
+                
+                console.log('Agregados', primerDiaSemanaAjustado - 1, 'días vacíos');
+                
+                // Agregar días del mes
+                for (let dia = 1; dia <= diasEnMes; dia++) {
+                    const dayElement = document.createElement('div');
+                    dayElement.className = 'calendar-day';
+                    dayElement.textContent = dia;
+                    
+                    const fechaCompleta = new Date(añoActualChat, mesActualChat, dia);
+                    const diaSemana = fechaCompleta.getDay();
+                    const esHoy = esFechaHoyChat(fechaCompleta);
+                    const esPasado = fechaCompleta < new Date(fechaActualChat.getFullYear(), fechaActualChat.getMonth(), fechaActualChat.getDate());
+                    const esDomingo = diaSemana === 0;
+                    
+                    // Aplicar clases según el estado del día
+                    if (esPasado) {
+                        dayElement.classList.add('disabled');
+                    } else if (esDomingo) {
+                        dayElement.classList.add('disabled');
+                    } else if (esHoy) {
+                        dayElement.classList.add('today');
+                    } else {
+                        dayElement.classList.add('available');
+                        
+                        // Agregar evento de clic
+                        dayElement.addEventListener('click', function() {
+                            seleccionarFechaChat(fechaCompleta, this);
+                        });
+                    }
+                    
+                    calendarDays.appendChild(dayElement);
+                }
+                
+                console.log('Agregados', diasEnMes, 'días del mes');
+                console.log('Total de elementos en el calendario:', calendarDays.children.length);
+            } else {
+                console.error('No se encontró el elemento calendar-days-chat');
+            }
+        }
+
+        function cambiarMesChat(direccion) {
+            mesActualChat += direccion;
+            
+            if (mesActualChat > 11) {
+                mesActualChat = 0;
+                añoActualChat++;
+            } else if (mesActualChat < 0) {
+                mesActualChat = 11;
+                añoActualChat--;
+            }
+            
+            mostrarCalendarioChat();
+        }
+
+        function seleccionarFechaChat(fecha, elemento) {
             // Remover selección anterior
-            document.querySelectorAll('.hour-btn.selected').forEach(btn => {
-                btn.classList.remove('selected');
+            document.querySelectorAll('#calendar-days-chat .calendar-day.selected').forEach(day => {
+                day.classList.remove('selected');
             });
             
-            // Seleccionar nueva hora
-            element.classList.add('selected');
-            datosCita.hora = hora;
+            // Seleccionar nueva fecha
+            elemento.classList.add('selected');
+            datosCita.fecha = fecha.toISOString().split('T')[0];
             
-            // Continuar con el flujo de datos
+            // Mostrar directamente las horas disponibles
             setTimeout(() => {
-                const chatMessages = document.getElementById('chatMessages');
-                const confirmDiv = document.createElement('div');
-                confirmDiv.className = 'message bot-message';
-                confirmDiv.innerHTML = `
-                    <div style="margin-bottom: 10px;">Perfecto. Ahora necesito algunos datos para completar tu cita. ¿Podrías proporcionarme tu nombre completo?</div>
-                `;
-                chatMessages.appendChild(confirmDiv);
-                chatMessages.scrollTop = chatMessages.scrollHeight;
-                pasoCita = 1; // Iniciar flujo de datos
+                mostrarHorasEnChat();
             }, 500);
         }
 
-        // Función para guardar la cita
-        function guardarCita() {
+        function seleccionarHoraChat(hora) {
+            datosCita.hora = hora;
+            
+            // Mostrar formulario con los tres inputs
+            setTimeout(() => {
+                const chatMessages = document.getElementById('chatMessages');
+                const formDiv = document.createElement('div');
+                formDiv.className = 'message bot-message';
+                formDiv.innerHTML = `
+                    <div style="margin-bottom: 15px;">Perfecto, has seleccionado ${datosCita.fecha} a las ${hora}. Ahora necesito tus datos personales:</div>
+                    <div class="form-container" style="max-width: 400px; margin: 0 auto;">
+                        <div class="form-group">
+                            <label for="nombreInput">Nombre completo:</label>
+                            <input type="text" id="nombreInput" class="form-input" placeholder="Tu nombre completo" onkeypress="handleFormKeyPress(event, 'nombreInput', 'telefonoInput')">
+                        </div>
+                        <div class="form-group">
+                            <label for="telefonoInput">Teléfono:</label>
+                            <input type="tel" id="telefonoInput" class="form-input" placeholder="Tu número de teléfono" onkeypress="handleFormKeyPress(event, 'telefonoInput', 'emailInput')">
+                        </div>
+                        <div class="form-group">
+                            <label for="emailInput">Email:</label>
+                            <input type="email" id="emailInput" class="form-input" placeholder="Tu dirección de email" onkeypress="handleFormKeyPress(event, 'emailInput', null)">
+                        </div>
+                        <div class="form-actions">
+                            <button type="button" class="btn-primary" onclick="enviarDatosPersonales()">Continuar</button>
+                            <button type="button" class="btn-secondary" onclick="cancelarReserva()">Cancelar</button>
+                        </div>
+                    </div>
+                `;
+                chatMessages.appendChild(formDiv);
+                chatMessages.scrollTop = chatMessages.scrollHeight;
+                
+                // Ocultar el input general (si existe)
+                const inputContainer = document.querySelector('.chat-input-container');
+                if (inputContainer) {
+                    inputContainer.classList.add('hidden');
+                }
+                
+                // Enfocar el primer input
+                setTimeout(() => {
+                    document.getElementById('nombreInput').focus();
+                }, 100);
+            }, 500);
+        }
+
+        function esFechaHoyChat(fecha) {
+            const hoy = new Date();
+            return fecha.getDate() === hoy.getDate() &&
+                   fecha.getMonth() === hoy.getMonth() &&
+                   fecha.getFullYear() === hoy.getFullYear();
+        }
+
+        function confirmarCita() {
+            // Enviar datos al servidor
             fetch('/api/guardar-cita-chat', {
                 method: 'POST',
                 headers: {
@@ -1263,8 +1613,17 @@
             .then(response => response.json())
             .then(data => {
                 if (data.success) {
-                    addMessage(data.mensaje, 'bot');
-                    // Resetear datos para nueva cita
+                    // Mostrar mensaje de confirmación
+                    const chatMessages = document.getElementById('chatMessages');
+                    const confirmDiv = document.createElement('div');
+                    confirmDiv.className = 'message bot-message';
+                    confirmDiv.innerHTML = `
+                        <div style="margin-bottom: 10px;">${data.mensaje}</div>
+                    `;
+                    chatMessages.appendChild(confirmDiv);
+                    chatMessages.scrollTop = chatMessages.scrollHeight;
+                    
+                    // Resetear datos
                     datosCita = {
                         nombre: '',
                         telefono: '',
@@ -1273,46 +1632,199 @@
                         fecha: '',
                         hora: ''
                     };
-                    pasoCita = 0;
                 } else {
-                    addMessage('Error al guardar la cita. Por favor, inténtalo de nuevo.', 'bot');
+                    alert('Error al guardar la cita: ' + data.error);
                 }
             })
             .catch(error => {
-                addMessage('Error al guardar la cita. Por favor, inténtalo de nuevo.', 'bot');
+                console.error('Error:', error);
+                alert('Error al guardar la cita. Por favor, inténtalo de nuevo.');
             });
         }
 
-        // Función para guardar la cita al final del flujo
-        function guardarCitaFinal() {
-            fetch('/api/guardar-cita-chat', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify(datosCita)
-            })
-            .then(response => response.json())
-            .then(data => {
-                if (data.success) {
-                    addMessage(data.mensaje, 'bot');
-                    // Resetear datos para nueva cita
-                    datosCita = {
-                        nombre: '',
-                        telefono: '',
-                        email: '',
-                        tipo_cita: '',
-                        fecha: '',
-                        hora: ''
-                    };
-                    pasoCita = 0;
+        function cancelarCita() {
+            sendQuickMessage('No, cancelar');
+        }
+
+        // Función para enviar datos personales
+        function enviarDatosPersonales() {
+            const nombre = document.getElementById('nombreInput').value.trim();
+            const telefono = document.getElementById('telefonoInput').value.trim();
+            const email = document.getElementById('emailInput').value.trim();
+            
+            // Validar campos
+            if (!nombre || !telefono || !email) {
+                alert('Por favor completa todos los campos');
+                return;
+            }
+            
+            // Validar email básico
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            if (!emailRegex.test(email)) {
+                alert('Por favor ingresa un email válido');
+                return;
+            }
+            
+            // Guardar datos
+            datosCita.nombre = nombre;
+            datosCita.telefono = telefono;
+            datosCita.email = email;
+            
+            // Mostrar resumen de la cita
+            mostrarResumenCita();
+        }
+
+        // Función para mostrar resumen de la cita
+        function mostrarResumenCita() {
+            const chatMessages = document.getElementById('chatMessages');
+            const resumenDiv = document.createElement('div');
+            resumenDiv.className = 'message bot-message';
+            resumenDiv.innerHTML = `
+                <div style="margin-bottom: 15px;">¡Excelente! Aquí tienes el resumen de tu cita:</div>
+                <div class="form-container" style="max-width: 400px; margin: 0 auto;">
+                    <div class="resumen-item">
+                        <strong>📅 Fecha:</strong> ${datosCita.fecha}
+                    </div>
+                    <div class="resumen-item">
+                        <strong>🕐 Hora:</strong> ${datosCita.hora}
+                    </div>
+                    <div class="resumen-item">
+                        <strong>👤 Nombre:</strong> ${datosCita.nombre}
+                    </div>
+                    <div class="resumen-item">
+                        <strong>📞 Teléfono:</strong> ${datosCita.telefono}
+                    </div>
+                    <div class="resumen-item">
+                        <strong>📧 Email:</strong> ${datosCita.email}
+                    </div>
+                    <div class="resumen-item">
+                        <strong>🏥 Tipo:</strong> ${datosCita.tipo_cita === 'revision' ? 'Revisión general' : 'Padecimiento específico'}
+                    </div>
+                    <div class="form-actions">
+                        <button type="button" class="btn-primary" onclick="confirmarCita()">✅ Confirmar cita</button>
+                        <button type="button" class="btn-secondary" onclick="cancelarCita()">❌ Cancelar</button>
+                    </div>
+                </div>
+            `;
+            chatMessages.appendChild(resumenDiv);
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+        }
+
+        // Función para cancelar reserva
+        function cancelarReserva() {
+            const chatMessages = document.getElementById('chatMessages');
+            const cancelDiv = document.createElement('div');
+            cancelDiv.className = 'message bot-message';
+            cancelDiv.innerHTML = `
+                <div style="margin-bottom: 10px;">Entendido, la reserva ha sido cancelada. Si cambias de opinión, puedes volver a solicitar una cita en cualquier momento.</div>
+            `;
+            chatMessages.appendChild(cancelDiv);
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+            
+            // Resetear datos
+            datosCita = {
+                nombre: '',
+                telefono: '',
+                email: '',
+                tipo_cita: '',
+                fecha: '',
+                hora: ''
+            };
+        }
+
+        // Función para manejar teclas en el formulario
+        function handleFormKeyPress(event, currentInput, nextInput) {
+            if (event.key === 'Enter') {
+                event.preventDefault();
+                
+                if (nextInput) {
+                    // Mover al siguiente input
+                    document.getElementById(nextInput).focus();
                 } else {
-                    addMessage('Error al guardar la cita. Por favor, inténtalo de nuevo.', 'bot');
+                    // En el último input, enviar el formulario
+                    enviarDatosPersonales();
                 }
-            })
-            .catch(error => {
-                addMessage('Error al guardar la cita. Por favor, inténtalo de nuevo.', 'bot');
-            });
+            }
+        }
+
+        // Función para volver al inicio
+        function volverAlInicio() {
+            // Limpiar el chat
+            document.getElementById('chatMessages').innerHTML = '';
+            
+            // Ocultar el botón volver
+            document.getElementById('backButton').classList.remove('show');
+            
+            // Mostrar el menú principal
+            document.getElementById('quickActions').style.display = 'flex';
+            
+            // Mostrar el mensaje de bienvenida
+            document.querySelector('.welcome-message').style.display = 'block';
+            
+            // Resetear variables de estado
+            estadoConversacion = 'inicial';
+            datosCita = {
+                nombre: '',
+                telefono: '',
+                email: '',
+                tipo_cita: '',
+                fecha: '',
+                hora: ''
+            };
+            pasoCita = 0;
+            // Forzar que el siguiente mensaje se envíe con estadoConversacion = 'inicial'
+            window.__resetEstadoConversacion = true;
+        }
+
+        // Función para activar el botón volver
+        function activarBotonVolver() {
+            document.getElementById('backButton').classList.add('show');
+            // Ocultar el menú principal
+            document.getElementById('quickActions').style.display = 'none';
+            // Ocultar el mensaje de bienvenida
+            document.querySelector('.welcome-message').style.display = 'none';
+        }
+
+        // Función para limpiar el chat
+        function limpiarChat() {
+            document.getElementById('chatMessages').innerHTML = '';
+        }
+
+        // Modificar sendQuickMessage para respetar el reset forzado
+        const _originalSendQuickMessage = sendQuickMessage;
+        sendQuickMessage = function(message) {
+            if (window.__resetEstadoConversacion) {
+                estadoConversacion = 'inicial';
+                window.__resetEstadoConversacion = false;
+            }
+            _originalSendQuickMessage(message);
+        };
+
+        function mostrarInputPadecimiento() {
+            const chatMessages = document.getElementById('chatMessages');
+            const inputDiv = document.createElement('div');
+            inputDiv.className = 'message bot-message';
+            inputDiv.innerHTML = `
+                <div style="margin-bottom: 10px;">Describe brevemente tu padecimiento o motivo de consulta:</div>
+                <input type="text" id="inputPadecimiento" class="form-input" placeholder="Ej: dolor de muela, inflamación, etc." style="margin-bottom: 10px; width: 100%; max-width: 350px;">
+                <button class="btn-primary" onclick="enviarPadecimiento()">Continuar</button>
+            `;
+            chatMessages.appendChild(inputDiv);
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+            setTimeout(() => {
+                document.getElementById('inputPadecimiento').focus();
+            }, 100);
+        }
+
+        function enviarPadecimiento() {
+            const input = document.getElementById('inputPadecimiento');
+            const texto = input.value.trim();
+            if (!texto) {
+                alert('Por favor, describe tu padecimiento.');
+                return;
+            }
+            addMessage(texto, 'user');
+            sendToAPI(texto);
         }
     </script>
 </body>
